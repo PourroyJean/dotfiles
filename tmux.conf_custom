@@ -3,9 +3,9 @@
 # - https://www.sheevaboite.fr/articles/show-me-your-tmux-conf/
 
 # Use c-t instead of c-b as the prefix
-set -g prefix C-w
+set -g prefix C-q
 unbind C-b
-bind C-w send-prefix
+bind C-q send-prefix
 
 #Emacs for status bar
 set -g status-keys emacs
