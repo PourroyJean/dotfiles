@@ -1,6 +1,0 @@
-alias ls='ls -h --color=auto' #color + size in MB GB...
-alias lrt='ls -lrt'           #sort by date
-alias emacs='emacs -nw'       #emacs no graphics
-
-# cd the last created directory
-alias cdd='cd `ls -t | head -1`'
