@@ -1,4 +1,12 @@
-#infinit bash
+#Put this in original /home/.bashrc
+
+#PATH_DOT_FILE=/path/to/dotfiles
+#test -s $PATH_DOT_FILE/bashrc_custom       && . $PATH_DOT_FILE/bashrc_custom       || true
+#test -s $PATH_DOT_FILE/bash_aliases_custom && . $PATH_DOT_FILE/bash_aliases_custom || true
+
+
+
+#infinite bash
 export HISTSIZE="10000000000"
 
 # SHELL PROMPT + git branch
