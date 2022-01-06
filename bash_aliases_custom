@@ -6,7 +6,7 @@ alias emacs='emacs -nw'       #emacs no graphics
 alias cdd='cd `ls -t | head -1`'
 
 #slurm
-alias sq='watch -n 1 squeue'
+alias sq='watch -d=cumulative -n 1 squeue'
 
 #Print the content of the last created file (and its name) in the current directory, sorry for the alias name...
 #            --  list only file - latest file -  cat with filename -- 
