@@ -1,5 +1,6 @@
 #infinite bash
 export HISTSIZE="1000000000"
+export PROMPT_COMMAND="history -a"   # append command each time to history file
 
 # SHELL PROMPT + git branch
 #   o184i023:performance_modelisation (typo) $ cd
