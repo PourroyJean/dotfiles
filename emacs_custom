@@ -1,5 +1,17 @@
 (setq backup-directory-alist `(("." . "~/.saves")))
 
+(setq-default tab-width 4)
+
+;; YAML
+;; cd ~/.emacs.d/
+;; git clone https://github.com/yoshiki/yaml-mode.git
+;;(add-to-list 'load-path"~/.emacs.d/yaml-mode")
+;;(load "yaml-mode.el")
+;;(require 'yaml-mode)
+;;(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+
+
+
 ;; Scroll plus smooth avec trackpad mac
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
 (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling

@@ -1,9 +1,12 @@
 #infinite bash
 export HISTSIZE="1000000000"
+export PROMPT_COMMAND="history -a"   # append command each time to history file
 
 # SHELL PROMPT + git branch
 #   o184i023:performance_modelisation (typo) $ cd
+
 export PS1='\[\033[00;32m\]gre-\h\[\033[00m\]:\[\033[00;35m\]\W \[\033[00m\](\[\033[00;36m\]`git branch 2>/dev/null|cut -f2 -d\* -s | sed -e "s/ //"`\[\033[00m\]) $ '
+
 #   @../codes > ls
 # export PS1="@../\W > \[$(tput sgr0)\]"
 
