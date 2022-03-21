@@ -22,8 +22,7 @@ alias sq='watch -d=cumulative -n 1 squeue'
 alias caca='ls -tp | grep -v /  | head -1     | xargs tail -v -n +1'
 
 #Change directory then ls...
-cd() { builtin cd "$@" && ls; }
-
+cd() { builtin cd "$@" && echo -n " --> " && pwd && ls; }
 
 # # ex - archive extractor
 # # usage: ex <file>
