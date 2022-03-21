@@ -1,13 +1,84 @@
-alias ls='ls -h --color=auto' #color + size in MB GB...
-alias lrt='ls -lrt'           #sort by date
+######################################
+############# GENERAL ################
+######################################
+
+alias lrt='ls -lrt'               # sort by date
+alias l.='ls -d .* --color=auto'  # ls only .file
+alias mv='mv -i'
+alias rm='rm -i'
+
 alias emacs='emacs -nw'       #emacs no graphics
+
+alias which='(alias; declare -f) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot'
 
 # cd the last created directory
 alias cdd='cd `ls -t | head -1`'
 
-#slurm #merci Seb
+#slurm #merci Seb : highlight differences
 alias sq='watch -d=cumulative -n 1 squeue'
 
 #Print the content of the last created file (and its name) in the current directory, sorry for the alias name...
 #            --  list only file - latest file -  cat with filename -- 
 alias caca='ls -tp | grep -v /  | head -1     | xargs tail -v -n +1'
+
+#Change directory then ls...
+cd() { builtin cd "$@" && ls; }
+
+
+# # ex - archive extractor
+# # usage: ex <file>
+ex ()
+{
+  if [ -f $1 ] ; then
+    case $1 in
+      *.tar.bz2)   tar xjf $1   ;;
+      *.tar.gz)    tar xzf $1   ;;
+      *.bz2)       bunzip2 $1   ;;
+      *.rar)       unrar x $1     ;;
+      *.gz)        gunzip $1    ;;
+      *.tar)       tar xf $1    ;;
+      *.tbz2)      tar xjf $1   ;;
+      *.tgz)       tar xzf $1   ;;
+      *.zip)       unzip $1     ;;
+      *.Z)         uncompress $1;;
+      *.7z)        7z x $1      ;;
+      *)           echo "'$1' cannot be extracted via ex()" ;;
+    esac
+  else
+    echo "'$1' is not a valid file"
+  fi
+}
+
+
+
+######################################
+########### BASH vs ZSH ##############
+######################################
+BASH_TYPE=`ps -p$$ -o cmd="",comm="",fname="" 2>/dev/null | sed 's/^-//' | grep -oE '\w+' | head -n1`
+if [[ $BASH_TYPE == "bash" ]]
+then
+    #"..."
+elif [[ $BASH_TYPE == "zsh" ]]
+then
+    #"..."
+fi
+
+######################################
+########## MAC vs LINUX ##############
+######################################
+if [[ $OSTYPE == 'darwin'* ]]; then
+    alias ls="ls -Gh"
+else
+    alias ls='ls --color=auto -h' # color + size in MB GB...
+fi
+
+######################################
+#############   WORK  ################
+######################################
+alias ssgre="ssh pourroy@16.16.184.23"
+alias sspinot="ssh pourroy@10.101.4.20"
+alias sslumi="ssh pourroy@lumi.csc.fi"
+alias sl1="ssh root@16.1.32.160"
+alias sl2="ssh root@15.196.54.32"
+alias ci1="ssh root@16.1.32.160"
+
