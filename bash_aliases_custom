@@ -56,10 +56,26 @@ ex ()
 BASH_TYPE=`ps -p$$ -o cmd="",comm="",fname="" 2>/dev/null | sed 's/^-//' | grep -oE '\w+' | head -n1`
 if [[ $BASH_TYPE == "bash" ]]
 then
-    echo "" #"..."
+    hist (){
+         if [ $# -eq 0 ]
+         then
+            echo "Max 1000 lines..."
+            history 1000 | cut -c 8-
+         else
+            history | cut -c 8- | grep $1
+         fi
+    }
 elif [[ $BASH_TYPE == "zsh" ]]
 then
-    echo "" #"..."
+    hist (){
+         if [ $# -eq 0 ]
+         then
+            echo "Max 1000 lines..."
+            history -1000 | cut -c 8-
+         else
+            history | cut -c 8- | grep $1
+         fi
+    }
 fi
 
 ######################################
