@@ -57,10 +57,10 @@ ex ()
 BASH_TYPE=`ps -p$$ -o cmd="",comm="",fname="" 2>/dev/null | sed 's/^-//' | grep -oE '\w+' | head -n1`
 if [[ $BASH_TYPE == "bash" ]]
 then
-    #"..."
+    echo "" #"..."
 elif [[ $BASH_TYPE == "zsh" ]]
 then
-    #"..."
+    echo "" #"..."
 fi
 
 ######################################
