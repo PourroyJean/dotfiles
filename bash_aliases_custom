@@ -16,6 +16,7 @@ alias cdd='cd `ls -t | head -1`'
 
 #slurm #merci Seb : highlight differences
 alias sq='watch -d=cumulative -n 1 squeue'
+alias SQ='watch -d=cumulative -n 1 squeue --user=pourroy'
 
 #Print the content of the last created file (and its name) in the current directory, sorry for the alias name...
 #            --  list only file - latest file -  cat with filename -- 
