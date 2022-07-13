@@ -49,6 +49,35 @@ ex ()
   fi
 }
 
+alias ipr='ip route | column -t'
+alias ips='ip --brief address show'
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+alias cp='cp -i'
+alias which='(alias; declare -f) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot'
+
+# User specific aliases and functions
+GREP (){
+    #grep -nRHIi --no-messages $1 $2 | column -t -s ":"
+    #Unbuffer preserve colors through pipe
+    unbuffer grep --color=auto -nRHIi --no-messages $2 $1 | column -t -s ":"
+}
+
+FIND (){
+    find $1 -print | grep -i $2
+}
+
+
+hist (){
+    if [ $# -eq 0 ]
+    then
+        echo "Max 1000 lines..."
+        history 1000 | cut -c 8-
+    else
+        history | cut -c 8- | grep $1
+    fi
+}
 
 
 ######################################
@@ -89,7 +118,7 @@ else
 fi
 
 ######################################
-#############   WORK  ################
+#############   SSH  ################
 ######################################
 alias ssgre="ssh pourroy@16.16.184.23"
 alias sspinot="ssh pourroy@10.101.4.20"
@@ -97,4 +126,6 @@ alias sslumi="ssh pourroy@lumi.csc.fi"
 alias sl1="ssh root@16.1.32.160"
 alias sl2="ssh root@15.196.54.32"
 alias ci1="ssh root@16.1.32.160"
+
+
 
