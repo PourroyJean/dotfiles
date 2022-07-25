@@ -30,4 +30,7 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
 
 
-vi $PATH_DOT_FILE/bashrc_custom #EDIT SERVER-NAME
+emacs $PATH_DOT_FILE/bashrc_custom #EDIT SERVER-NAME
+
+# CDD command to move to DOTFILE location
+echo -e "\nalias CDD='cd ${PATH_DOT_FILE}'" >> ~/.bashrc
