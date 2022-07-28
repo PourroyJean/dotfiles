@@ -13,10 +13,13 @@ alias which='(alias; declare -f) | /usr/bin/which --tty-only --read-alias --read
 
 # cd the last created directory
 alias cdd='cd `ls -t | head -1`'
+alias cdt='cd ~/TOOLS' 
 
-#slurm #merci Seb : highlight differences
+# ... SLURM ... #
+# #merci Seb : highlight differences
 alias sq='watch -d=cumulative -n 1 squeue'
-alias SQ='watch -d=cumulative -n 1 squeue --user=pourroy'
+alias SQ='watch -d=cumulative -n 1 squeue --user=$USER'
+alias sc='scancel -u $USER'
 
 #Print the content of the last created file (and its name) in the current directory, sorry for the alias name...
 #            --  list only file - latest file -  cat with filename -- 
