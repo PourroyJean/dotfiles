@@ -11,9 +11,11 @@ alias emacs='emacs -nw'       #emacs no graphics
 
 alias which='(alias; declare -f) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot'
 
-# cd the last created directory
-alias cdd='cd `ls -dt */ | head -1`'
-alias cdt='cd ~/TOOLS/dotfiles' 
+
+alias cdd='cd `ls -dt */ | head -1`'              # cd the latest directory created
+alias cdt='cd ~/TOOLS/'                           # cd the tools directory
+alias CDD='cd ~/TOOLS/dotfiles'                   # alias CDD='cd /users/pourroy/TOOLS/dotfiles'
+
 
 # ... SLURM ... #
 # #merci Seb : highlight differences
@@ -61,12 +63,16 @@ alias cp='cp -i'
 alias which='(alias; declare -f) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot'
 
 # User specific aliases and functions
+
+#GREP find in file : GREP . string
 GREP (){
     #grep -nRHIi --no-messages $1 $2 | column -t -s ":"
     #Unbuffer preserve colors through pipe
     grep --color=auto -nRHIi --no-messages $2 $1 | column -t -s ":"
 }
 
+
+#FIND find filename : FIND . filename
 FIND (){
     find $1 -print | grep -i $2
 }
