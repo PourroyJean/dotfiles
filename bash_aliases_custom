@@ -23,6 +23,20 @@ alias sq='watch -d=cumulative -n 1 squeue'
 alias SQ='watch -d=cumulative -n 1 squeue --user=$USER'
 alias sc='scancel -u $USER'
 
+#Usage
+#0 parameter : list the avalaible partitions
+#1 parameter : list the node of the partition #param1
+SINFO (){
+  if [ $# -eq 0 ]
+  then
+    sinfo -o "%.10P | %.5D | %20N |  %.4c |  %.8m |  %.15b |  %.10G"
+  else
+    sinfo -o "%10n | %.15b | %.4c | %.7X | %.5Y | %.7Z | %.6m | %.6t" -p $1 | head -n 10
+  fi
+}
+
+
+
 #Print the content of the last created file (and its name) in the current directory, sorry for the alias name...
 #            --  list only file - latest file -  cat with filename -- 
 alias caca='ls -tp | grep -v /  | head -1     | xargs tail -v -n +1'
