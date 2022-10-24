@@ -30,8 +30,11 @@ SINFO (){
   if [ $# -eq 0 ]
   then
     sinfo -o "%.10P | %.5D | %20N |  %.4c |  %.8m |  %.15b |  %.10G"
-  else
+  elif [ $# -eq 1 ]
+  then
     sinfo -o "%10n | %.15b | %.4c | %.7X | %.5Y | %.7Z | %.6m | %.6t" -p $1 | head -n 10
+  else
+    sinfo -o "%10n | %.15b | %.4c | %.7X | %.5Y | %.7Z | %.6m | %.6t" -p $1 | grep $2
   fi
 }
 
