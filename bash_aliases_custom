@@ -17,6 +17,13 @@ alias cdt='cd ~/TOOLS/'                           # cd the tools directory
 alias CDD='cd ~/TOOLS/dotfiles'                   # alias CDD='cd /users/pourroy/TOOLS/dotfiles'
 
 
+#Show the diff between two commands
+# Usage : DIFF "ls -l" "ls-la"
+DIFF (){
+  diff <($1) <($2)
+}
+
+
 # ... SLURM ... #
 # #merci Seb : highlight differences
 alias sq='watch -d=cumulative -n 1 squeue'
