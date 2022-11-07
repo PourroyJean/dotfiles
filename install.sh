@@ -57,7 +57,7 @@ if ! [ -x "$(command -v tree)" ]; then
     [ -d tmp ] || mkdir tmp
     cd tmp
     wget https://mama.indstate.edu/users/ice/tree/src/tree-2.0.4.tgz
-    ex tree-2.0.4.tgz
+    tar zxvf tree-2.0.4.tgz
     cd tree-2.0.4/
     make
     [ -d ~/.local/bin ] || mkdir -p ~/.local/bin
