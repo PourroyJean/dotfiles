@@ -1,6 +1,8 @@
 ######################################
 ############# GENERAL ################
 ######################################
+PATH_DOT_FILE=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
 
 alias lrt='ls -lrt'               # sort by date
 alias l.='ls -d .* --color=auto'  # ls only .file
@@ -22,29 +24,6 @@ alias CDD='cd ~/TOOLS/dotfiles'                   # alias CDD='cd /users/pourroy
 DIFF (){
   diff <($1) <($2)
 }
-
-
-# ... SLURM ... #
-# #merci Seb : highlight differences
-alias sq='watch -d=cumulative -n 1 squeue'
-alias SQ='watch -d=cumulative -n 1 squeue --user=$USER'
-alias sc='scancel -u $USER'
-
-#Usage
-#0 parameter : list the avalaible partitions
-#1 parameter : list the node of the partition #param1
-SINFO (){
-  if [ $# -eq 0 ]
-  then
-    sinfo -o "%.10P | %.5D | %20N |  %.4c |  %.8m |  %.15b | %.10G"
-  elif [ $# -eq 1 ]
-  then
-    sinfo -o "%10n | %.15b | %.4c | %.7X | %.5Y | %.7Z | %.6m | %.6t | %.10G" -p $1 | head -n 20
-  else
-    sinfo -o "%10n | %.15b | %.4c | %.7X | %.5Y | %.7Z | %.6m | %.6t | %.10G" -p $1 | grep $2
-  fi
-}
-
 
 
 #Print the content of the last created file (and its name) in the current directory, sorry for the alias name...
@@ -92,7 +71,7 @@ alias which='(alias; declare -f) | /usr/bin/which --tty-only --read-alias --read
 GREP (){
     #grep -nRHIi --no-messages $1 $2 | column -t -s ":"
     #Unbuffer preserve colors through pipe
-    grep --color=auto -nRHIi --no-messages $2 $1 | column -t -s ":"
+    grep --color=auto -nRHIi --no-messages $2 $1 
 }
 
 
@@ -162,3 +141,5 @@ alias ci1="ssh root@16.1.32.160"
 
 
 
+########## SOURCE OTHER ALIASES #######
+source ${PATH_DOT_FILE}/bash_aliases_hpc
