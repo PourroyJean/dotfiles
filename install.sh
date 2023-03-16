@@ -10,6 +10,7 @@ is_FZF_installed=false
 is_TREE_installed=false
 is_EMACS_installed=false
 is_TMUX_installed=false
+is_GDU_installed=false
 
 #ADD THE TWO CUSTOME FILES TO THE EXISTING ONE
 #Check if already updated with our custom files      -- before sourcing the file we test if it exists
@@ -68,12 +69,27 @@ if ! [ -x "$(command -v tree)" ]; then
 fi
 [ -x "$(command -v tree)" ] && is_TREE_installed=true
 
+#-- GDU --
+if ! [ -x "$(command -v gdu)" ]; then
+    echo "Installing gdu command : ";
+    [ -d tmp ] || mkdir tmp
+    cd tmp
+    curl -L https://github.com/dundee/gdu/releases/latest/download/gdu_linux_amd64.tgz | tar xz
+    chmod +x gdu_linux_amd64
+    [ -d ~/.local/bin ] || mkdir -p ~/.local/bin
+    cp gdu_linux_amd64 ~/.local/bin/gdu
+    cd ..
+    echo "Please add .local/bin/ to your PATH ..."
+    PATH=.local/bin/:$PATH
+fi
+[ -x "$(command -v gdu)" ] && is_GDU_installed=true
 
 echo "+ Summary of the installation : "
 echo "   - fzf       $is_FZF_installed"
 echo "   - tree      $is_TREE_installed"
 echo "   - emacs     $is_EMACS_installed"
 echo "   - tmux      $is_TMUX_installed"
+echo "   - gdu       $is_TMUX_installed"
 
 emacs $PATH_DOT_FILE/bashrc_custom #EDIT SERVER-NAME
 
