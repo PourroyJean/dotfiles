@@ -3,6 +3,7 @@
 # CONFIGURATION
 PATH_DOT_FILE=`pwd`
 BASHRC_FILE=~/.bashrc
+# BASHRC_FILE=~/.bash_profile  #For Mac
 CFG_EMACS_PATH=~/.emacs
 CFG_TMUX_PATH=~/.tmux.conf
 
@@ -15,8 +16,8 @@ is_GDU_installed=false
 
 #ADD THE TWO CUSTOME FILES TO THE EXISTING ONE
 #Check if already updated with our custom files      -- before sourcing the file we test if it exists
-grep -q $PATH_DOT_FILE/bashrc_custom       $BASHRC_FILE || echo "test -s $PATH_DOT_FILE/bashrc_custom       && . $PATH_DOT_FILE/bashrc_custom       || true" >> ~/.bashrc
-grep -q $PATH_DOT_FILE/bash_aliases_custom $BASHRC_FILE || echo "test -s $PATH_DOT_FILE/bash_aliases_custom && . $PATH_DOT_FILE/bash_aliases_custom || true" >> ~/.bashrc
+grep -q $PATH_DOT_FILE/bashrc_custom       $BASHRC_FILE || echo "test -s $PATH_DOT_FILE/bashrc_custom       && . $PATH_DOT_FILE/bashrc_custom       || true" >> $BASHRC_FILE
+grep -q $PATH_DOT_FILE/bash_aliases_custom $BASHRC_FILE || echo "test -s $PATH_DOT_FILE/bash_aliases_custom && . $PATH_DOT_FILE/bash_aliases_custom || true" >> $BASHRC_FILE
 
 # -- EMACS --
 if [ -x "$(command -v emacs)" ]; then
