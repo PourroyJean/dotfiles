@@ -1,6 +1,10 @@
 #infinite bash
-export HISTSIZE="1000000000"
-export PROMPT_COMMAND="history -a"   # append command each time to history file
+export HISTSIZE="1000000000"        # Lines of history that we can store in memory.
+export HISTFILESIZE="1000000000"    # Lines of history we can write on disk.
+export PROMPT_COMMAND="history -a"  # Append command each time to history file
+export HISTCONTROL=ignoreboth       # Don’t save duplicates
+export HISTTIMEFORMAT="%F %T "      # example : 9  2023-04-13 11:23:46 echo "a"
+
 
 # SHELL PROMPT + git branch
 #   o184i023:performance_modelisation (typo) $ cd
