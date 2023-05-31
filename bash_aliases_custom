@@ -17,6 +17,7 @@ alias which='(alias; declare -f) | /usr/bin/which --tty-only --read-alias --read
 alias cdd='cd `ls -dt */ | head -1`'              # cd the latest directory created
 alias cdt='cd ~/TOOLS/'                           # cd the tools directory
 alias CDD='cd ~/TOOLS/dotfiles'                   # alias CDD='cd /users/pourroy/TOOLS/dotfiles'
+alias cd='function _cd() { if [ -d "$1" ]; then cd "$1"; else cd "$(dirname "$1")"; fi; }; _cdf' # cd even when its a file
 
 
 #Show the diff between two commands
