@@ -2,6 +2,7 @@
 
 # CONFIGURATION
 PATH_DOT_FILE=`pwd`
+PATH_UTILS="$PATH_DOT_FILE/utils"
 BASHRC_FILE=~/.bashrc
 # BASHRC_FILE=~/.bash_profile  #For Mac
 CFG_EMACS_PATH=~/.emacs
@@ -14,6 +15,7 @@ is_EMACS_installed=false
 is_TMUX_installed=false
 is_GDU_installed=false
 is_HELLO_installed=false
+
 
 #We export the PS1 prompt from the original bashrc file, 
 #so the server name modification doesn't appear in git
@@ -29,6 +31,7 @@ fi
 #Check if already updated with our custom files      -- before sourcing the file we test if it exists
 grep -q $PATH_DOT_FILE/bashrc_custom       $BASHRC_FILE || echo "test -s $PATH_DOT_FILE/bashrc_custom       && . $PATH_DOT_FILE/bashrc_custom       || true" >> $BASHRC_FILE
 grep -q $PATH_DOT_FILE/bash_aliases_custom $BASHRC_FILE || echo "test -s $PATH_DOT_FILE/bash_aliases_custom && . $PATH_DOT_FILE/bash_aliases_custom || true" >> $BASHRC_FILE
+
 
 # -- EMACS --
 if [ -x "$(command -v emacs)" ]; then
@@ -88,15 +91,17 @@ fi
 if ! [ -x "$(command -v hello_jobstep)" ]; then
     echo "Installing hello_jobstep command : ";
     cd hello_jobstep
-    source gpu_env.sh
+    source $PATH_DOT_FILE/utils/gpu_env.sh
     make
     [ -d ~/.local/bin ] || mkdir -p ~/.local/bin
     cp hello_jobstep ~/.local/bin/
+    make clean
     cd ..
     echo "Please add .local/bin/ to your PATH ..."
     PATH=.local/bin/:$PATH
 fi
 [ -x "$(command -v hello_jobstep)" ] && is_HELLO_installed=true
+
 
 #-- GDU --
 if ! [ -x "$(command -v gdu)" ]; then
@@ -120,5 +125,3 @@ echo "   - emacs     $is_EMACS_installed"
 echo "   - tmux      $is_TMUX_installed"
 echo "   - gdu       $is_TMUX_installed"
 echo "   - hello     $is_HELLO_installed"
-
-
