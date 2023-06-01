@@ -1,8 +1,14 @@
 #!/bin/bash
+DF_PATH_TO_UTILS=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/utils
+
+#Lumi env
+alias LUMIC='source $DF_PATH_TO_UTILS/lumi_c.sh' 
+alias LUMIG='source $DF_PATH_TO_UTILS/lumi_g.sh' 
+alias GPU='source $DF_PATH_TO_UTILS/gpu_env.sh' 
 
 
 # ... SLURM ... #
-# #merci Seb : highlight differences
+# merci Seb : highlight differences
 alias sq='watch -d=cumulative -n 1 squeue'
 alias SQ='watch -d=cumulative -n 1 squeue --user=$USER'
 alias sc='scancel -u $USER'
@@ -27,7 +33,6 @@ SINFO (){
 # SHOSTS custom command from gre lab
 # display nodes with features provided in parameter
 shosts (){
-
 if [ $# -eq 0 ]; then
   sinfo -a -o "%24N %.5D %11T %20E %.4c %.8z %.6m %f" \
   |sort -d \
