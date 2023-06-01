@@ -23,7 +23,7 @@ cd() {
     if [ -f "$1" ]; then
         cd "$(dirname "$1")"
     else
-        builtin cd "$@" && echo -n "  --> " && pwd && ls; 
+        builtin cd "$@" && echo -n "  --> " && mypwd && ls --color=auto; 
     fi
 }
 
