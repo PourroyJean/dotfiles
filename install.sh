@@ -13,6 +13,8 @@ is_TREE_installed=false
 is_EMACS_installed=false
 is_TMUX_installed=false
 is_GDU_installed=false
+is_HELLO_installed=false
+
 #We export the PS1 prompt from the original bashrc file, 
 #so the server name modification doesn't appear in git
 if ! grep -q --fixed-strings "export PS1='\[\033[00;32m" $BASHRC_FILE ; then
@@ -50,7 +52,7 @@ if [ -x "$(command -v tmux)" ]; then
   ln -s $PATH_DOT_FILE/tmux.conf_custom $CFG_TMUX_PATH
   is_TMUX_installed=true
 else
-  echo "tmux is not installed"
+  echo "tmux is not installed, and won't be"
 fi
 
 
@@ -80,6 +82,22 @@ if ! [ -x "$(command -v tree)" ]; then
 fi
 [ -x "$(command -v tree)" ] && is_TREE_installed=true
 
+
+#-- hello_jobstep --
+#check https://code.ornl.gov/olcf/hello_jobstep/-/tree/master
+if ! [ -x "$(command -v hello_jobstep)" ]; then
+    echo "Installing hello_jobstep command : ";
+    cd hello_jobstep
+    source gpu_env.sh
+    make
+    [ -d ~/.local/bin ] || mkdir -p ~/.local/bin
+    cp hello_jobstep ~/.local/bin/
+    cd ..
+    echo "Please add .local/bin/ to your PATH ..."
+    PATH=.local/bin/:$PATH
+fi
+[ -x "$(command -v hello_jobstep)" ] && is_HELLO_installed=true
+
 #-- GDU --
 if ! [ -x "$(command -v gdu)" ]; then
     echo "Installing gdu command : ";
@@ -101,7 +119,6 @@ echo "   - tree      $is_TREE_installed"
 echo "   - emacs     $is_EMACS_installed"
 echo "   - tmux      $is_TMUX_installed"
 echo "   - gdu       $is_TMUX_installed"
-
-emacs $PATH_DOT_FILE/bashrc_custom #EDIT SERVER-NAME
+echo "   - hello     $is_HELLO_installed"
 
 
