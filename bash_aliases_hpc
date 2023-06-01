@@ -2,8 +2,8 @@
 DF_PATH_TO_UTILS=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/utils
 
 #Lumi env
-alias LUMIC='source $DF_PATH_TO_UTILS/lumi_c.sh' 
-alias LUMIG='source $DF_PATH_TO_UTILS/lumi_g.sh' 
+alias LUMIC='source $DF_PATH_TO_UTILS/partition_c.sh' 
+alias LUMIG='source $DF_PATH_TO_UTILS/partition_g.sh' 
 alias GPU='source $DF_PATH_TO_UTILS/gpu_env.sh' 
 
 
