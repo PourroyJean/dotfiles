@@ -13,6 +13,15 @@ is_TREE_installed=false
 is_EMACS_installed=false
 is_TMUX_installed=false
 is_GDU_installed=false
+#We export the PS1 prompt from the original bashrc file, 
+#so the server name modification doesn't appear in git
+if ! grep -q --fixed-strings "export PS1='\[\033[00;32m" $BASHRC_FILE ; then
+  echo "export PS1='\[\033[00;32m\]SERVER_NAME_CHANGE_ME-\h\[\033[00m\]:\[\033[00;35m\]\W \[\033[00m\](\[\033[00;36m\]`git branch 2>/dev/null|cut -f2 -d\* -s | sed -e "s/ //"`\[\033[00m\]) $ '" >> $BASHRC_FILE
+  echo "Please update the server name, will open vi..."
+  sleep 2
+  vi $BASHRC_FILE +$
+fi
+
 
 #ADD THE TWO CUSTOME FILES TO THE EXISTING ONE
 #Check if already updated with our custom files      -- before sourcing the file we test if it exists
