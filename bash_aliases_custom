@@ -17,7 +17,16 @@ alias which='(alias; declare -f) | /usr/bin/which --tty-only --read-alias --read
 alias cdd='cd `ls -dt */ | head -1`'              # cd the latest directory created
 alias cdt='cd ~/TOOLS/'                           # cd the tools directory
 alias CDD='cd ~/TOOLS/dotfiles'                   # alias CDD='cd /users/pourroy/TOOLS/dotfiles'
-alias cd='function _cd() { if [ -d "$1" ]; then cd "$1"; else cd "$(dirname "$1")"; fi; }; _cd' # cd even when its a file
+
+#Change directory, even if its a file, then ls...
+cd() {
+    if [ -f "$1" ]; then
+        cd "$(dirname "$1")"
+    else
+        builtin cd "$@" && echo -n "  --> " && pwd && ls; 
+    fi
+}
+
 
 
 #Show the diff between two commands
@@ -30,9 +39,6 @@ DIFF (){
 #Print the content of the last created file (and its name) in the current directory, sorry for the alias name...
 #            --  list only file - latest file -  cat with filename -- 
 alias caca='ls -tp | grep -v /  | head -1     | xargs tail -v -n +1'
-
-#Change directory then ls...
-cd() { builtin cd "$@" && echo -n " --> " && pwd && ls; }
 
 # # ex - archive extractor
 # # usage: ex <file>
