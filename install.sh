@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # CONFIGURATION
-PATH_DOT_FILE=`pwd`
-PATH_UTILS="$PATH_DOT_FILE/utils"
+DT_ROOT_PATH=`pwd`
+PATH_UTILS="$DT_ROOT_PATH/utils"
 BASHRC_FILE=~/.bashrc
 # BASHRC_FILE=~/.bash_profile  #For Mac
 CFG_EMACS_PATH=~/.emacs
@@ -29,8 +29,8 @@ fi
 
 #ADD THE TWO CUSTOME FILES TO THE EXISTING ONE
 #Check if already updated with our custom files      -- before sourcing the file we test if it exists
-grep -q $PATH_DOT_FILE/bashrc_custom       $BASHRC_FILE || echo "test -s $PATH_DOT_FILE/bashrc_custom       && . $PATH_DOT_FILE/bashrc_custom       || true" >> $BASHRC_FILE
-grep -q $PATH_DOT_FILE/bash_aliases_custom $BASHRC_FILE || echo "test -s $PATH_DOT_FILE/bash_aliases_custom && . $PATH_DOT_FILE/bash_aliases_custom || true" >> $BASHRC_FILE
+grep -q $DT_ROOT_PATH/bashrc_custom       $BASHRC_FILE || echo "test -s $DT_ROOT_PATH/bashrc_custom       && . $DT_ROOT_PATH/bashrc_custom       || true" >> $BASHRC_FILE
+grep -q $DT_ROOT_PATH/bash_aliases_custom $BASHRC_FILE || echo "test -s $DT_ROOT_PATH/bash_aliases_custom && . $DT_ROOT_PATH/bash_aliases_custom || true" >> $BASHRC_FILE
 
 
 # -- EMACS --
@@ -39,7 +39,7 @@ if [ -x "$(command -v emacs)" ]; then
   if [[ -f "$CFG_EMACS_PATH" ]]; then
       mv $CFG_EMACS_PATH "${CFG_EMACS_PATH}.old"
   fi
-  ln -s $PATH_DOT_FILE/emacs_custom     $CFG_EMACS_PATH
+  ln -s $DT_ROOT_PATH/emacs_custom     $CFG_EMACS_PATH
   is_EMACS_installed=true
 else
   echo "emacs is not installed"
@@ -52,7 +52,7 @@ if [ -x "$(command -v tmux)" ]; then
   if [[ -f "$CFG_TMUX_PATH" ]]; then
      mv $CFG_TMUX_PATH "${CFG_TMUX_PATH}.old"
   fi
-  ln -s $PATH_DOT_FILE/tmux.conf_custom $CFG_TMUX_PATH
+  ln -s $DT_ROOT_PATH/tmux.conf_custom $CFG_TMUX_PATH
   is_TMUX_installed=true
 else
   echo "tmux is not installed, and won't be"
@@ -91,7 +91,7 @@ fi
 if ! [ -x "$(command -v hello_jobstep)" ]; then
     echo "Installing hello_jobstep command : ";
     cd hello_jobstep
-    source $PATH_DOT_FILE/utils/gpu_env.sh
+    source $DT_ROOT_PATH/utils/gpu_env.sh
     make
     [ -d ~/.local/bin ] || mkdir -p ~/.local/bin
     cp hello_jobstep ~/.local/bin/

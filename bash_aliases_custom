@@ -1,7 +1,7 @@
 ######################################
 ############# GENERAL ################
 ######################################
-PATH_DOT_FILE=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+DT_ROOT_PATH=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 
 alias lrt='ls -lrt'               # sort by date
@@ -16,7 +16,7 @@ alias which='(alias; declare -f) | /usr/bin/which --tty-only --read-alias --read
 
 alias cdd='cd `ls -dt */ | head -1`'              # cd the latest directory created
 alias cdt='cd ~/TOOLS/'                           # cd the tools directory
-alias CDD='cd ~/TOOLS/dotfiles'                   # alias CDD='cd /users/pourroy/TOOLS/dotfiles'
+alias CDD='cd ${DT_ROOT_PATH}/'                   # alias CDD='cd /users/pourroy/TOOLS/dotfiles'
 
 #Change directory, even if its a file, then ls...
 cd() {
@@ -156,4 +156,4 @@ alias ci1="ssh root@16.1.32.160"
 
 
 ########## SOURCE OTHER ALIASES #######
-source ${PATH_DOT_FILE}/bash_aliases_hpc
+source ${DT_ROOT_PATH}/bash_aliases_hpc
