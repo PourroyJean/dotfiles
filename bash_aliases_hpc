@@ -10,8 +10,12 @@ alias GPU='source $DF_PATH_TO_UTILS/gpu_env.sh'
 # ... SLURM ... #
 # merci Seb : highlight differences
 alias sq='watch -d=cumulative -n 1 squeue'
+#See only my jobs
 alias SQ='watch -d=cumulative -n 1 squeue --user=$USER'
+#Cancel only my jobs
 alias sc='scancel -u $USER'
+#print slurm config to be past in a sbatch script
+alias SB='echo "#SBATCH --account $SLURM_ACCOUNT"; echo "#SBATCH --partition $SLURM_PARTITION"; echo "#SBATCH --reservation $SLURM_RESERVATION"'
 
 
 #Usage
