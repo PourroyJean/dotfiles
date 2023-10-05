@@ -20,14 +20,24 @@ alias SB='echo "#SBATCH --account $SLURM_ACCOUNT"; echo "#SBATCH --partition $SL
 
 #Usage
 #0 parameter : list the avalaible partitions
-#1 parameter : list the node of the partition #param1
+#1 parameter : list the node of the partition 
+#           or list the node details (if digits)
 SINFO (){
+  #### 0 paramaters : list available partitions
   if [ $# -eq 0 ]
   then
     sinfo -o "%.10P | %.5D | %20N |  %.4c |  %.8m |  %.15b | %.10G"
+  
+  #### 1 paramaters : node or partition details
   elif [ $# -eq 1 ]
   then
-    sinfo -o "%10n | %.15b | %.4c | %.7X | %.5Y | %.7Z | %.6m | %.6t | %.10G" -p $1 | head -n 20
+    #If there is more than 3 digits: I expect it is a node name, so I print the details
+    if [[ $1 =~ ([0-9]{4,}) ]]; then
+      scontrol show node=$1
+    else
+    #If not, it is a partition name, so I print the 20 first nodes of this partition
+      sinfo -o "%10n | %.15b | %.4c | %.7X | %.5Y | %.7Z | %.6m | %.6t | %.10G" -p $1 | head -n 20
+    fi
   else
     sinfo -o "%10n | %.15b | %.4c | %.7X | %.5Y | %.7Z | %.6m | %.6t | %.10G" -p $1 | grep $2
   fi
