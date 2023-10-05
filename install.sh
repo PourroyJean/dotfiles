@@ -125,3 +125,7 @@ echo "   - emacs     $is_EMACS_installed"
 echo "   - tmux      $is_TMUX_installed"
 echo "   - gdu       $is_TMUX_installed"
 echo "   - hello     $is_HELLO_installed"
+
+echo "+ Please update : "
+echo "   - MY_SLURM_*   in  ~/.bashrc"
+echo "   - Module list  in  $DT_ROOT_PATH/utils/gpu_env.sh"
