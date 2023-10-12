@@ -1,9 +1,10 @@
 #!/bin/bash
 DF_PATH_TO_UTILS=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/utils
 
-#Lumi env
-alias LUMIC='source $DF_PATH_TO_UTILS/partition_c.sh' 
-alias LUMIG='source $DF_PATH_TO_UTILS/partition_g.sh' 
+#2 slurm particion: CPU and GPU
+alias PARTC='source $DF_PATH_TO_UTILS/partition_c.sh && SB' 
+alias PARTG='source $DF_PATH_TO_UTILS/partition_g.sh && SB'
+#GPU env to load: rocm etc...
 alias GPU='source $DF_PATH_TO_UTILS/gpu_env.sh' 
 
 
@@ -33,7 +34,7 @@ SINFO() {
     case $# in
         0)
             # PARTITION|NODES|NODELIST|CPUS|MEMORY|ACTIVE_FEATURES|GRES|NODES(A/I/O/T)
-            sinfo -o "%.10P | %.5D | %20N | %.4c | %.8m | %.15b | %.10G | %20F" ;;
+            sinfo -o "%.9P | %.4D | %13N | %.4c | %.8m | %.15b | %.7G | %20F" ;;
         1)
             if [[ $1 =~ ([0-9]{4,}) ]]; then
                 scontrol show node=$1
