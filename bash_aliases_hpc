@@ -18,30 +18,33 @@ alias sc='scancel -u $USER'
 alias SB='echo "#SBATCH --account $SLURM_ACCOUNT"; echo "#SBATCH --partition $SLURM_PARTITION"; echo "#SBATCH --reservation $SLURM_RESERVATION"'
 
 
-#Usage
-#0 parameter : list the avalaible partitions
-#1 parameter : list the node of the partition 
-#           or list the node details (if digits)
-SINFO (){
-  #### 0 paramaters : list available partitions
-  if [ $# -eq 0 ]
-  then
-    sinfo -o "%.10P | %.5D | %20N |  %.4c |  %.8m |  %.15b | %.10G"
-  
-  #### 1 paramaters : node or partition details
-  elif [ $# -eq 1 ]
-  then
-    #If there is more than 3 digits: I expect it is a node name, so I print the details
-    if [[ $1 =~ ([0-9]{4,}) ]]; then
-      scontrol show node=$1
-    else
-    #If not, it is a partition name, so I print the 20 first nodes of this partition
-      sinfo -o "%10n | %.15b | %.4c | %.7X | %.5Y | %.7Z | %.6m | %.6t | %.10G" -p $1 | head -n 20
-    fi
-  else
-    sinfo -o "%10n | %.15b | %.4c | %.7X | %.5Y | %.7Z | %.6m | %.6t | %.10G" -p $1 | grep $2
-  fi
+# SINFO Command for SLURM
+# Usage:
+# Without parameters: Displays available partitions.
+#    Example: SINFO
+# With 1 parameter:
+# - If it's a partition name: Displays the first 20 nodes of that partition.
+#    Example: SINFO main
+# - If it's a node name (typically strings with more than 3 digits): Shows detailed information about that node.
+#    Example: SINFO nid001915
+# With more than 1 parameter: Filters nodes of the specified partition based on the second parameter.
+#    Example: SINFO main nid001915
+SINFO() {
+    case $# in
+        0)
+            # PARTITION|NODES|NODELIST|CPUS|MEMORY|ACTIVE_FEATURES|GRES|NODES(A/I/O/T)
+            sinfo -o "%.10P | %.5D | %20N | %.4c | %.8m | %.15b | %.10G | %20F" ;;
+        1)
+            if [[ $1 =~ ([0-9]{4,}) ]]; then
+                scontrol show node=$1
+            else
+                sinfo -o "%10n | %.15b | %.4c | %.7X | %.5Y | %.7Z | %.6m | %.6t | %.10G" -p $1 | head -n 20
+            fi ;;
+        *)
+            sinfo -o "%10n | %.15b | %.4c | %.7X | %.5Y | %.7Z | %.6m | %.6t | %.10G" -p $1 | grep $2 ;;
+    esac
 }
+
 
 
 # SHOSTS custom command from gre lab
