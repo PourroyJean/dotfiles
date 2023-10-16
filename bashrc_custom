@@ -5,4 +5,14 @@ export PROMPT_COMMAND="history -a"  # Append command each time to history file
 export HISTCONTROL=ignoreboth       # Don’t save duplicates
 export HISTTIMEFORMAT="%F %T "      # example : 9  2023-04-13 11:23:46 echo "a"
 
+#FZF CTRL-R layout
+export FZF_CTRL_R_OPTS="\
+--border sharp \
+--height 40% \
+--cycle \
+--prompt='Recherche> ' \
+--pointer='→' \
+--color='dark,fg:magenta' \
+--margin=3%,3%,8%,2% \
+--layout default"
 
