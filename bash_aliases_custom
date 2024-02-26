@@ -42,6 +42,8 @@ DIFF (){
 #Print the content of the last created file (and its name) in the current directory, sorry for the alias name...
 #            --  list only file - latest file -  cat with filename -- 
 alias caca='ls -tp | grep -v /  | head -1     | xargs tail -v -n +1'
+# same but keep track of the file
+alias CACA='ls -tp | grep -v / | head -1 | xargs tail -f -v -n +1'
 
 # # ex - archive extractor
 # # usage: ex <file>
@@ -74,6 +76,9 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias cp='cp -i'
 alias which='(alias; declare -f) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot'
+
+# HPE way
+alias WHO='whoami ; echo -e "\e[1m\e[38;2;1;169;130m\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\e[0m\n\e[1m\e[38;2;1;169;130m\u2588\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u2588\u0020\e[0m\n\e[1m\e[38;2;1;169;130m\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\e[0m\n\e[1mHewlett Packard\e[0m\nEnterprise\n"'
 
 # User specific aliases and functions
 
