@@ -1,92 +1,99 @@
 #!/bin/bash
-###################################  GENERAL ########################################
-#SBATCH --account project_462000031
-#SBATCH --reservation                
-#SBATCH --partition standard-g          #LUMI : CPU (small, standard) GPU (small-g, standard-g)
+# SLURM Batch Script for High-Performance Computing Job Submission
+# environmental settings, and execution parameters tailored for both CPU and optional GPU computing environments.
+# Author : Jean Pourroy 2024, HPE
 
-#SBATCH --job-name=TODO
+# ======================= General Job Information ============================
+#  Job Account, Reservation, and Partition                              
+# ============================================================================
+
+#SBATCH --account=                  # Lumi : project_462000031
+#SBATCH --reservation=              # hackathon
+#SBATCH --partition=                # CPU: small, standard | GPU: small-g, standard-g
+#SBATCH --job-name=                 # Specify a descriptive job name
+#SBATCH --constraint=               # For adastra: MI250, GENOA
+
+
+# ======================= Job Resource Allocation ============================
+#  Node, Task, and CPU Configuration                                      
+# ============================================================================
+
 #SBATCH --exclusive
-#SBATCH --time=00:60:00
-#SBATCH --constraint=GENOA              #for adastra: MI250, GENOA
-#SBATCH --output=job-%j.out
-#SBATCH --error=job-%j.err
-#####################################################################################
+#SBATCH --time=00:60:00             # Job time limit (HH:MM:SS)
+#SBATCH --output=run-%j.out         # Standard output file
+#SBATCH --error=run-%j.err          # Standard error file
 
-
-###################################    JOB   ########################################
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --cpus-per-task=8
 #SBATCH --hint=nomultithread
+
+# GPU Configuration (Uncomment if needed)
 ##SBATCH --gres=gpu:8
 ##SBATCH --gpus-per-node=1
-#####################################################################################
 
+# SLURM Execution Flags used to launch the srun command
+SLURM_FLAGS=(
+    --nodes=1                             # or -N : number of nodes
+    --ntasks=24                           # or -n : number of MPI tasks
+    --ntasks-per-node=24                  # number of MPI tasks per node
+    --cpus-per-task="${OMP_NUM_THREADS}"  # number of CPUs per MPI task
+    --gpus-per-node=8                     # number of GPUs required per allocated node
+)
+SLURM_FLAGS="${SLURM_FLAGS[@]}"
 
-###################################    ENV   ########################################
-export OMP_PLACES=sockets               # Set the OpenMP places to sockets (correspond to NUMA)
+# ======================= Environment Configuration ==========================
+#  OpenMP and MPI Settings
+# ============================================================================
+
+export OMP_PLACES=sockets               # Set OpenMP places to sockets (corresponds to NUMA)
 export OMP_PROC_BIND=true               # Enable OpenMP processor binding
-export OMP_NUM_THREADS=8                # OpenMP threads numbers per MPI task
+export OMP_NUM_THREADS=8                # Number of OpenMP threads per MPI task
 
+#source env.sh gpu                      # TODO: Select the required environment in this script
 
-#export MPICH_OFI_NIC_VERBOSE=2         # Display information pertaining to NIC selection
-#export MPICH_OFI_NIC_POLICY=GPU        # Select a NIC device that is closest to the GPU
-#export MPICH_GPU_SUPPORT_ENABLED=1     # MPI operations with buffers on GPU-attached memory region
-#export MPICH_GPU_IPC_ENABLED=1         # GPU IPC support for intra-node GPU-GPU communication
+# ========================= Special Configuration ============================
+
+# Advanced MPI and GPU Settings (Uncomment if needed)
+#export MPICH_OFI_NIC_VERBOSE=2         # Display NIC selection info
+#export MPICH_OFI_NIC_POLICY=GPU        # Select NIC closest to GPU
+#export MPICH_GPU_SUPPORT_ENABLED=1     # Enable MPI operations on GPU-attached memory
+#export MPICH_GPU_IPC_ENABLED=1         # Enable GPU IPC for intra-node communication
 #export MPICH_MPIIO_HINTS_DISPLAY=1
 #export MPICH_MPIIO_STATS=1
 
-#source env.sh gpu #TODO : select the required env in this script
+# Environment Script (Uncomment and specify if needed)
+# GPU IPC Threshold Adjustment (Uncomment if needed)
+#export MPICH_GPU_IPC_THRESHOLD=8192    # Adjust for intra-node GPU-GPU communication
+
+# Random VNI Selection for Fabric Interfaces (Uncomment if needed)
+#export FI_CXI_DEFAULT_VNI=$(od -vAn -N4 -tu < /dev/urandom)
 
 
 
-#################################    SPECIAL   ######################################
-
- # MPICH_GPU_IPC_THRESHOLD
- #   - Intra-node GPU-GPU (see man mpi)
- #   - maximum size of shared memory segments used for IPC communications
- #   - default 1024
-#  export MPICH_GPU_IPC_THRESHOLD=8192
-
-# export FI_CXI_DEFAULT_VNI=$(od -vAn -N4 -tu < /dev/urandom)
+# ============================ Job Execution ================================
+#  Setup and srun
+# ===========================================================================
 
 
-#####################################################################################
+APP_EXE="./app"   # TODO
+APP_FLAGS="--arg" # TODO
 
 
+# ================================= RUN ======================================
 
-
-###############################    APPLICATION   ####################################
-
-APP_EXE="./acheck"
-APP_FLAGS="-v"
-
-SLURM_FLAGS=(   --nodes=1                             # or -N : number of nodes
-                --ntasks=24                           # or -n : number of tasks
-                --ntasks-per-node=24                  # number of tasks per node
-                --cpus-per-task="${OMP_NUM_THREADS}"  # number of CPUs per task
-	            --gpus-per-node=8                     # number of GPUs required per allocated node
-	     )
-
-SLURM_FLAGS="${SLURM_FLAGS[@]}"
-
-
-
-###############################    EXECUTION   #####################################
-
-#### -- ENV CHECK -- ####
-
+# Optional: Check Environment and Dependencies
 # env
 # srun -N 1 -n 1 ldd ${APP_EXE}
 
-
+# Job Execution Command
 echo -e "Will run the following command:\n srun ${SLURM_FLAGS} ${APP_EXE} ${APP_FLAGS}\n"
 job_starttime=$(date +%s%N)
 
-
+# Execute the Application
 srun ${SLURM_FLAGS} ${APP_EXE} ${APP_FLAGS}
 
-
+# Calculate and Report Job Runtime
 job_endtime=$(date +%s%N)
-job_runtime=$(echo "scale=9; 1.0*10^(-9)*(${job_endtime}-${job_starttime})" | bc -l)
-echo "Job time = ${job_runtime} seconds"
+job_runtime=$(echo "scale=9; (${job_endtime}-${job_starttime})*1e-9" | bc -l)
+echo "Job runtime = ${job_runtime} seconds"
