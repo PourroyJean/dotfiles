@@ -36,19 +36,24 @@
 SLURM_FLAGS=(
     --nodes=1                             # or -N : number of nodes
     --ntasks=24                           # or -n : number of MPI tasks
-    --ntasks-per-node=24                  # number of MPI tasks per node
-    --cpus-per-task="${OMP_NUM_THREADS}"  # number of CPUs per MPI task
-    --gpus-per-node=8                     # number of GPUs required per allocated node
+    --cpus-per-task="${OMP_NUM_THREADS}"  # or -c : number of CPUs per MPI task, care hypertread
+    --ntasks-per-node=24                  # maximum count of tasks per node
+    --hint=nomultithread                  # disable multithread, has to be in both srun/sbatch
+    # --distribution=block:block          # node and mpi tasks binding
+    # --gpus-per-node=8                   # number of GPUs required per allocated node
+    # --ntasks-per-socket=16              # mpi task limit per socket
+
+
 )
 SLURM_FLAGS="${SLURM_FLAGS[@]}"
 
 # ======================= Environment Configuration ==========================
-#  OpenMP and MPI Settings
+#  OpenMP and module environment
 # ============================================================================
 
-export OMP_PLACES=sockets               # Set OpenMP places to sockets (corresponds to NUMA)
-export OMP_PROC_BIND=true               # Enable OpenMP processor binding
-export OMP_NUM_THREADS=8                # Number of OpenMP threads per MPI task
+export OMP_PLACES=sockets               #  = threads | cores | sockets (corresponds to NUMA)
+export OMP_PROC_BIND=true               #  = true    | close | spread | master | false
+export OMP_NUM_THREADS=8                #  = 1       | 64    | ${SLURM_CPUS_PER_TASK}
 
 #source env.sh gpu                      # TODO: Select the required environment in this script
 
