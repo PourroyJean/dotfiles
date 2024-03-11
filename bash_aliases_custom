@@ -20,6 +20,7 @@ alias pwd='mypwd "$@"'
 alias cdd='cd `ls -dt */ | head -1`'              # cd the latest directory created
 alias cdt='cd ~/TOOLS/'                           # cd the tools directory
 alias CDD='cd ${DT_ROOT_PATH}/'                   # alias CDD='cd /users/pourroy/TOOLS/dotfiles'
+alias tree='tree -L 2'
 
 #Change directory, even if its a file, then ls...
 cd() {
