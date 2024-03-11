@@ -155,7 +155,7 @@ install_gdu() {
     if curl -L https://github.com/dundee/gdu/releases/latest/download/gdu_linux_amd64.tgz | tar xz &>/dev/null; then
         chmod +x gdu_linux_amd64
         mkdir -p "$HOME/.local/bin"
-        cp gdu_linux_amd64 "$HOME/.local/bin/gdu" && is_GDU_installed=true
+        cp gdu_linux_amd64 "$HOME/.local/bin/gdu" &&         is_installed[GDU]=true
         echo "  ~ gdu successfully installed."
     else
         echo "  ~ Failed to download or extract gdu. Please check your internet connection or the URL."
