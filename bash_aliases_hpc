@@ -18,6 +18,13 @@ alias sc='scancel -u $USER'
 #print slurm config to be past in a sbatch script
 alias SB='echo "#SBATCH --account $SLURM_ACCOUNT"; echo "#SBATCH --partition $SLURM_PARTITION"; echo "#SBATCH --reservation $SLURM_RESERVATION"'
 
+# ... MODULE ... #
+alias ml='module list'    # Displays the list of loaded modules.
+alias ma='module avail'   # Displays list of available modules.
+alias mlv='module load'   # Loads a specific module.
+alias mu='module unload'  # Unload a specific module.
+alias mp='module purge'   # Unload all loaded modules.
+
 
 # SINFO Command for SLURM
 # Usage:
