@@ -22,8 +22,7 @@
 
 #SBATCH --exclusive                 # We don't share nodes with others
 #SBATCH --time=00:60:00             # Job time limit (HH:MM:SS)
-#SBATCH --output=run_%x-%j.out      # Standard output file
-#SBATCH --error=run-%x-%j.err       # Standard error file
+#SBATCH --output=run_%x-%j.out      # Standard + Error output file
 
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
