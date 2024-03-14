@@ -16,7 +16,35 @@ alias SQ='watch -d=cumulative -n 1 squeue --user=$USER'
 #Cancel only my jobs
 alias sc='scancel -u $USER'
 #print slurm config to be past in a sbatch script
-alias SB='echo "#SBATCH --account $SLURM_ACCOUNT"; echo "#SBATCH --partition $SLURM_PARTITION"; echo "#SBATCH --reservation $SLURM_RESERVATION"'
+# alias SB='echo "#SBATCH --account $SLURM_ACCOUNT"; echo "#SBATCH --partition $SLURM_PARTITION"; echo "#SBATCH --reservation $SLURM_RESERVATION"'
+
+
+# SB                              # This will print the SLURM information
+# SB my_script.sh                 # This will run "sbatch my_script.sh         --wait and print the output file"
+# SB sbatach option my_script.sh  # This will run "sbatch my_script.sh options --wait and print the output file"
+SB() {
+  if [ $# -eq 0 ]; then
+    # No arguments provided, print the SLURM information
+    echo "#SBATCH --account $SLURM_ACCOUNT"
+    echo "#SBATCH --partition $SLURM_PARTITION"
+    echo "#SBATCH --reservation $SLURM_RESERVATION"
+  elif [ $# -gt 1 ]; then
+    # More than one argument provided
+    local args=("${@:1:$#-1}") # Get all arguments except the last one
+    local last_arg="${@: -1}"  # Get the last argument
+    # Run sbatch with the collected arguments and the --wait flag followed by the last argument
+    echo sbatch "${args[@]}" --wait "$last_arg"
+    sbatch "${args[@]}" --wait "$last_arg" ; caca
+  else
+    # Exactly one argument provided
+    sbatch --wait "$1" ; caca
+  fi
+}
+
+
+
+
+
 
 # ... MODULE ... #
 alias ml='module list'    # Displays the list of loaded modules.
