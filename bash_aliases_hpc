@@ -34,10 +34,21 @@ SB() {
     local last_arg="${@: -1}"  # Get the last argument
     # Run sbatch with the collected arguments and the --wait flag followed by the last argument
     echo sbatch "${args[@]}" --wait "$last_arg"
-    sbatch "${args[@]}" --wait "$last_arg" ; caca
+    sbatch "${args[@]}" --wait "$last_arg"
+    if [ $? -eq 0 ]; then
+      caca
+    else
+      echo "Error with the sbatch command"
+    fi
+
   else
     # Exactly one argument provided
-    sbatch --wait "$1" ; caca
+    sbatch --wait "$1"
+    if [ $? -eq 0 ]; then
+      caca
+    else
+      Echo "Error with the sbatch command"
+    fi
   fi
 }
 
