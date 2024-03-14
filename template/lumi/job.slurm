@@ -20,20 +20,38 @@
 # Job Configuration : modify only once here for the sbatch AND the srun 
 # ============================================================================
 
-#SBATCH --nodes=1                       # or -N : number of nodes
-#SBATCH --ntasks=48                     # or -n : number of MPI tasks
-#SBATCH --cpus-per-task=2               # or -c : number of CPUs per MPI task
-#SBATCH --ntasks-per-node=48            # maximum count of tasks per node
-#SBATCH --hint=nomultithread            # disable multithread, has to be in both srun/sbatch
-#SBATCH --exclusive                     # We don't share nodes with others
+#SBATCH --exclusive                 # We don't share nodes with others
+#SBATCH --time=00:60:00             # Job time limit (HH:MM:SS)
+#SBATCH --output=run_%x-%j.out      # Standard output file
+#SBATCH --error=run-%x-%j.err       # Standard error file
 
-##SBATCH --gres=gpu:8                   # GPU Configuration (Uncomment if needed)
-##SBATCH --gpus-per-node=1              # GPU Configuration (Uncomment if needed)
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=24
+#SBATCH --cpus-per-task=8
+#SBATCH --hint=nomultithread
 
-J_DISTRIBUTION=block:block              # Not usable directly in the sbatch
+# GPU Configuration (Uncomment if needed)
+##SBATCH --gres=gpu:8
+##SBATCH --gpus-per-node=1
+
+# SLURM Execution Flags used to launch the srun command
+SLURM_FLAGS=(
+    --nodes=1                             # or -N : number of nodes
+    --ntasks=24                           # or -n : number of MPI tasks
+    --cpus-per-task="${OMP_NUM_THREADS}"  # or -c : number of CPUs per MPI task, care hypertread
+    --ntasks-per-node=24                  # maximum count of tasks per node
+    --hint=nomultithread                  # disable multithread, has to be in both srun/sbatch
+    # --distribution=block:block          # node and mpi tasks binding
+    # --gpus-per-node=8                   # number of GPUs required per allocated node
+    # --ntasks-per-socket=16              # mpi task limit per socket
 
 
-# =========================== OpenMP and module ==============================
+)
+SLURM_FLAGS="${SLURM_FLAGS[@]}"
+
+# ======================= Environment Configuration ==========================
+#  OpenMP and module environment
+# ============================================================================
 
 export OMP_PLACES=sockets               #  = threads | cores | sockets (corresponds to NUMA)
 export OMP_PROC_BIND=true               #  = true    | close | spread | master | false
