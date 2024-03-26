@@ -1,0 +1,142 @@
+#!/bin/bash
+DF_PATH_TO_UTILS=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/utils
+
+#2 slurm particion: CPU and GPU
+alias PARTC='source $DF_PATH_TO_UTILS/partition_c.sh && SB' 
+alias PARTG='source $DF_PATH_TO_UTILS/partition_g.sh && SB'
+#GPU env to load: rocm etc...
+alias GPU='source $DF_PATH_TO_UTILS/gpu_env.sh' 
+
+
+# ... SLURM ... #
+# merci Seb : highlight differences
+alias sq='watch -d=cumulative -n 1 squeue'
+#See only my jobs
+alias SQ='watch -d=cumulative -n 1 squeue --user=$USER'
+#Cancel only my jobs
+alias sc='scancel -u $USER'
+#print slurm config to be past in a sbatch script
+# alias SB='echo "#SBATCH --account $SLURM_ACCOUNT"; echo "#SBATCH --partition $SLURM_PARTITION"; echo "#SBATCH --reservation $SLURM_RESERVATION"'
+
+
+# SB                              # This will print the SLURM information
+# SB my_script.sh                 # This will run "sbatch my_script.sh         --wait and print the output file"
+# SB sbatch option my_script.sh   # This will run "sbatch my_script.sh options --wait and print the output file"
+SB() {
+  if [ $# -eq 0 ]; then
+    # No arguments provided, print the SLURM information
+    echo "#SBATCH --account $SLURM_ACCOUNT"
+    echo "#SBATCH --partition $SLURM_PARTITION"
+    echo "#SBATCH --reservation $SLURM_RESERVATION"
+  elif [ $# -gt 1 ]; then
+    # More than one argument provided
+    local args=("${@:1:$#-1}") # Get all arguments except the last one
+    local last_arg="${@: -1}"  # Get the last argument
+    # Run sbatch with the collected arguments and the --wait flag followed by the last argument
+    echo sbatch "${args[@]}" --wait "$last_arg"
+    sbatch "${args[@]}" --wait "$last_arg"
+    if [ $? -eq 0 ]; then
+      caca
+    else
+      echo "Error with the sbatch command"
+    fi
+
+  else
+    # Exactly one argument provided
+    sbatch --wait "$1"
+    if [ $? -eq 0 ]; then
+      caca
+    else
+      Echo "Error with the sbatch command"
+    fi
+  fi
+}
+
+
+
+
+
+
+# ... MODULE ... #
+alias ml='module list'    # Displays the list of loaded modules.
+alias ma='module avail'   # Displays list of available modules.
+alias mlv='module load'   # Loads a specific module.
+alias mu='module unload'  # Unload a specific module.
+alias mp='module purge'   # Unload all loaded modules.
+
+
+# SINFO Command for SLURM
+# Usage:
+# Without parameters: Displays available partitions.
+#    Example: SINFO
+# With 1 parameter:
+# - If it's a partition name: Displays the first 20 nodes of that partition.
+#    Example: SINFO main
+# - If it's a node name (typically strings with more than 3 digits): Shows detailed information about that node.
+#    Example: SINFO nid001915
+# With more than 1 parameter: Filters nodes of the specified partition based on the second parameter.
+#    Example: SINFO main nid001915
+SINFO() {
+    case $# in
+        0)
+            # PARTITION|NODES|NODELIST|CPUS|MEMORY|ACTIVE_FEATURES|GRES|NODES(A/I/O/T)
+            sinfo -o "%.9P | %.4D | %13N | %.4c | %.8m | %.15b | %.7G | %20F" ;;
+        1)
+            if [[ $1 =~ ([0-9]{4,}) ]]; then
+                scontrol show node=$1
+            else
+                sinfo -o "%10n | %.15b | %.4c | %.7X | %.5Y | %.7Z | %.6m | %.6t | %.10G" -p $1 | head -n 20
+            fi ;;
+        *)
+            sinfo -o "%10n | %.15b | %.4c | %.7X | %.5Y | %.7Z | %.6m | %.6t | %.10G" -p $1 | grep $2 ;;
+    esac
+}
+
+
+
+# SHOSTS custom command from gre lab
+# display nodes with features provided in parameter
+shosts (){
+if [ $# -eq 0 ]; then
+  sinfo -a -o "%24N %.5D %11T %20E %.4c %.8z %.6m %f" \
+  |sort -d \
+  |sed '/^[A-Za-z]\+ [A-Za-z]\+ [0-9]\+ [0-9][0-9]:[0-9][0-9]:[0-9][0-9] [0-9][0-9][0-9][0-9]$/d'
+  exit 0
+fi
+
+while [ "${1:0:1}" == '-' ]; do
+  if [ "${1:0:2}" == '-h' ]; then ### HELP
+    echo 'Usage: '$0' [-o] feat1 [feat2 ...]'
+    echo '       List nodes with feat1 (AND feat2 ...) feature(s).'
+    echo '       The optional "-o" flag turns the implicit "AND" into an implicit "OR".'
+    exit 0
+  fi
+  if [ "${1:0:2}" == '-o' ]; then ### OR
+    shift
+    sinfo -a -o "%24N %.5D %11T %20E %.4c %.8z %.6m %f" \
+    | sort -d \
+    |sed '/^[A-Za-z]\+ [A-Za-z]\+ [0-9]\+ [0-9][0-9]:[0-9][0-9]:[0-9][0-9] [0-9][0-9][0-9][0-9]$/d' \
+    |awk '{if(NR==1)printf("%s\n",$0)}'
+    for f in $*
+    do
+      str="$str -e $f"
+    done
+    sinfo -a -o "%24N %.5D %11T %20E %.4c %.8z %.6m %f" |sort -d |grep -i $str
+    exit 0
+  fi
+  # any other flag ignored
+  shift
+done
+
+# AND is the default
+  IFS=""
+  header=`sinfo -a -o "%24N %.5D %11T %20E %.4c %.8z %.6m %f" |awk '{if(NR==1)printf("%s\n",$0)}'`
+  list=`sinfo -h -a -o "%24N %.5D %11T %20E %.4c %.8z %.6m %f" |awk 'BEGIN{RS="willnotbematched"}{gsub(/\r*\n+/,"myowncr");print}'`
+  for f in $*
+  do
+    list=`echo $list |awk 'BEGIN{IGNORECASE=1;RS="myowncr";ORS=RS}/[ ,]'"$f"'[, ]|[ ,]'"$f"'$/{print}'`
+  done
+  echo $header
+  echo -n $list |awk 'BEGIN{RS="myowncr"}{print}'
+
+}
