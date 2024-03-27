@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 
 # CONFIGURATION
-DT_ROOT_PATH=$(pwd)
-PATH_UTILS="$DT_ROOT_PATH/utils"
+DF_ROOT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASHRC_FILE="$HOME/.bashrc"
-[ "$(uname)" == "Darwin" ] && BASHRC_FILE="$HOME/.bash_profile"
+ZSHRC_FILE="$HOME/.zshrc"
 CFG_EMACS_PATH="$HOME/.emacs"
 CFG_TMUX_PATH="$HOME/.tmux.conf"
 
@@ -17,6 +17,7 @@ declare -A is_installed=(
     [GDU]=false
     [HELLO]=false
     [XTHI]=false
+    [BAT]=false
 )
 
 install_fzf() {
@@ -48,7 +49,7 @@ install_tree() {
         return
     fi
 
-    mkdir -p tmp && cp tree-2.0.4.tgz tmp && pushd tmp >/dev/null || {
+    mkdir -p tmp && cp ${DF_ROOT_PATH}/tools/tree-2.0.4.tgz tmp && pushd tmp >/dev/null || {
         echo "  ~ Failed to create a temporary directory for the tree installation."
         return
     }
@@ -84,8 +85,8 @@ customize_emacs() {
         return
     fi
 
-    if [ ! -f "$DT_ROOT_PATH/emacs_custom" ]; then
-        echo "  ~ Custom Emacs configuration file does not exist at $DT_ROOT_PATH/emacs_custom."
+    if [ ! -f "$DF_ROOT_PATH/emacs_custom" ]; then
+        echo "  ~ Custom Emacs configuration file does not exist at $DF_ROOT_PATH/emacs_custom."
         is_installed[EMACS]=false
         return
     fi
@@ -95,15 +96,44 @@ customize_emacs() {
         echo "  ~ Existing Emacs configuration backed up as ${CFG_EMACS_PATH}.old."
     fi
 
-    ln -s "$DT_ROOT_PATH/emacs_custom" "$CFG_EMACS_PATH" && is_installed[EMACS]=true
+    ln -s "$DF_ROOT_PATH/emacs_custom" "$CFG_EMACS_PATH" && is_installed[EMACS]=true
     echo "  ~ Emacs configuration successfully customized."
 }
 
 # Example for TMUX linking
 customize_tmux() {
-    if command -v tmux &>/dev/null && [ -f "$DT_ROOT_PATH/tmux.conf_custom" ]; then
+    if command -v tmux &>/dev/null && [ -f "$DF_ROOT_PATH/tmux.conf_custom" ]; then
         [ -f "$CFG_TMUX_PATH" ] && mv "$CFG_TMUX_PATH" "${CFG_TMUX_PATH}.old"
-        ln -s "$DT_ROOT_PATH/tmux.conf_custom" "$CFG_TMUX_PATH" && is_installed[TMUX]=true
+        ln -s "$DF_ROOT_PATH/tmux.conf_custom" "$CFG_TMUX_PATH" && is_installed[TMUX]=true
+    fi
+}
+
+
+customize_zshrc(){
+    echo "Starting customization of $ZSHRC_FILE ..."
+
+    LINE1="export DF_ROOT_PATH=\"$DF_ROOT_PATH\""
+    LINE2="source \"\$DF_ROOT_PATH/zsh/my_zshrc.sh\""
+
+    # Check if the lines already exist in .zshrc to avoid duplicates
+    if ! grep -qxF "$LINE1" "$ZSHRC_FILE"; then
+        echo    "$LINE1" >> "$ZSHRC_FILE"
+        echo -e "$LINE2\n" >> "$ZSHRC_FILE"
+        echo "  ~ Updated $ZSHRC_FILE with DF_ROOT_PATH : ${DF_ROOT_PATH}"
+    fi
+
+    if ! grep -q "export MY_SLURM_ACCOUNT" "$ZSHRC_FILE"; then
+        # String not found; append the text
+        echo "  ~ Adding SLURM environment variables to $ZSHRC_FILE..."
+        
+        # Append each line individually
+        echo "export MY_SLURM_ACCOUNT=project_462000031" >> "$ZSHRC_FILE"
+        echo "export MY_SLURM_PARTITION_C=standard" >> "$ZSHRC_FILE"
+        echo "export MY_SLURM_PARTITION_G=standard-g" >> "$ZSHRC_FILE"
+        echo "export MY_SLURM_RESERVATION_C=" >> "$ZSHRC_FILE"
+        echo "export MY_SLURM_RESERVATION_G=" >> "$ZSHRC_FILE"
+    else
+        echo "  ~ SLURM environment variables already set in $ZSHRC_FILE."
     fi
 }
 
@@ -123,16 +153,16 @@ customize_bashrc() {
     fi
 
     # Include custom files
-    if ! grep -q "$DT_ROOT_PATH/bashrc_custom" "$BASHRC_FILE"; then
+    if ! grep -q "$DF_ROOT_PATH/bashrc_custom" "$BASHRC_FILE"; then
         echo "  ~ Adding source command for bashrc_custom to $BASHRC_FILE..."
-        echo "test -s $DT_ROOT_PATH/bashrc_custom && . $DT_ROOT_PATH/bashrc_custom || true" >>"$BASHRC_FILE"
+        echo "test -s $DF_ROOT_PATH/bashrc_custom && . $DF_ROOT_PATH/bashrc_custom || true" >>"$BASHRC_FILE"
     else
         echo "  ~ bashrc_custom already sourced in $BASHRC_FILE."
     fi
 
-    if ! grep -q "$DT_ROOT_PATH/bash_aliases_custom" "$BASHRC_FILE"; then
+    if ! grep -q "$DF_ROOT_PATH/bash_aliases_custom" "$BASHRC_FILE"; then
         echo "  ~ Adding source command for bash_aliases_custom to $BASHRC_FILE..."
-        echo "test -s $DT_ROOT_PATH/bash_aliases_custom && . $DT_ROOT_PATH/bash_aliases_custom || true" >>"$BASHRC_FILE"
+        echo "test -s $DF_ROOT_PATH/bash_aliases_custom && . $DF_ROOT_PATH/bash_aliases_custom || true" >>"$BASHRC_FILE"
     else
         echo "  ~ bash_aliases_custom already sourced in $BASHRC_FILE."
     fi
@@ -206,12 +236,12 @@ install_hello() {
         return
     fi
 
-    pushd "$DT_ROOT_PATH/tools" >/dev/null || {
-        echo "  ~ Failed to navigate to $DT_ROOT_PATH/tools"
+    pushd "$DF_ROOT_PATH/tools" >/dev/null || {
+        echo "  ~ Failed to navigate to $DF_ROOT_PATH/tools"
         return
     }
     if [ ! -d "hello_jobstep" ]; then
-        echo "  ~ hello_jobstep directory does not exist in $DT_ROOT_PATH."
+        echo "  ~ hello_jobstep directory does not exist in $DF_ROOT_PATH."
         popd >/dev/null
         return
     fi
@@ -240,16 +270,54 @@ install_hello() {
     popd >/dev/null
 }
 
-# Call installation and configuration functions
-install_fzf
-install_tree
-install_xthi
-# install_hello
-install_gdu
+install_bat() {
+    echo "Starting installation of bat..."
+    # Check if bat is already installed
+    if ! command -v bat &>/dev/null; then
+        BAT_URL="https://github.com/sharkdp/bat/releases/download/v0.24.0/bat-v0.24.0-x86_64-unknown-linux-gnu.tar.gz"
+        BAT_FILE="bat-v0.24.0-x86_64-unknown-linux-gnu"
+        TEMP_DIR=$(mktemp -d)
+        echo "  ~ Downloading and extracting bat..."
+        
+        # Check if wget command succeeds
+        if ! wget -q -O - "${BAT_URL}" | tar -xz -C "${TEMP_DIR}"; then
+            echo "  ~ Error downloading or extracting bat. Please check your internet connection or URL."
+            rm -rf "${TEMP_DIR}"  # Cleanup
+            return  # Leave the function due to error
+        fi
+        
+        echo "  ~ Installing bat..."
+        # Check if cp command succeeds
+        if ! cp "${TEMP_DIR}/${BAT_FILE}/bat" "$HOME/.local/bin"; then
+            echo "  ~ Error installing bat. Please check your permissions or disk space."
+            rm -rf "${TEMP_DIR}"  # Cleanup
+            return  # Leave the function due to error
+        fi
+        
+        rm -rf "${TEMP_DIR}"  # Cleanup after successful installation
+        echo "  ~ bat installation completed successfully."
+        is_installed[BAT]=true  # Assuming is_installed is previously declared and handled
 
-customize_emacs
+    else
+        echo "  ~ bat is already installed."
+        is_installed[BAT]=true
+    fi
+}
+
+
+
+# Call installation and configuration functions
+#install_fzf
+# install_tree
+#install_xthi
+# install_hello
+#install_gdu
+#install_bat
+
+#customize_emacs
 # customize_tmux
-customize_bashrc
+# customize_bashrc
+customize_zshrc
 
 # Summary
 echo "+ Summary of the installation: "
@@ -259,5 +327,5 @@ for key in "${!is_installed[@]}"; do
 done
 
 echo "+ Please update: "
-echo "   - MY_SLURM_*   in  ~/.bashrc"
-echo "   - Module list  in  $DT_ROOT_PATH/utils/gpu_env.sh"
+echo "   - MY_SLURM_*   in  $ZSHRC_FILE"
+echo "   - Module list  in  $DF_ROOT_PATH/utils/gpu_env.sh"

@@ -1,9 +1,6 @@
 ######################################
 ############# GENERAL ################
 ######################################
-DT_ROOT_PATH=/Users/jean/Documents/CODE/dotfiles
-
-echo "zsh aliases custom"
 
 alias lrt='ls -lrt'               # sort by date
 alias l.='ls -d .* --color=auto'  # ls only .file
@@ -15,8 +12,14 @@ alias tree='tree -L 2'
 
 alias cdd='cd `ls -dt */ | head -1`'              # cd the latest directory created
 alias cdt='cd ~/TOOLS/'                           # cd the tools directory
-alias CDD='cd ${DT_ROOT_PATH}/'                   # alias CDD='cd /users/pourroy/TOOLS/dotfiles'
+alias CDD='cd ${DF_ROOT_PATH}/'                   # cd ditfile directory
 
+alias ipr='ip route | column -t'
+alias ips='ip --brief address show'
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+alias cp='cp -i'
 
 # alias which='(alias; declare -f) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot' # TODO
 
@@ -66,12 +69,7 @@ ex ()
   fi
 }
 
-alias ipr='ip route | column -t'
-alias ips='ip --brief address show'
-alias rm='rm -i'
-alias cp='cp -i'
-alias mv='mv -i'
-alias cp='cp -i'
+
 
 # HPE way
 alias WHO='whoami ; echo -e "\e[1m\e[38;2;1;169;130m\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\e[0m\n\e[1m\e[38;2;1;169;130m\u2588\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u2588\u0020\e[0m\n\e[1m\e[38;2;1;169;130m\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\e[0m\n\e[1mHewlett Packard\e[0m\nEnterprise\n"'

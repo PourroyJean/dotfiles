@@ -1,5 +1,4 @@
-#!/bin/bash
-DF_PATH_TO_UTILS=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/utils
+#!/bin/zsh
 
 #2 slurm particion: CPU and GPU
 alias PARTC='source $DF_PATH_TO_UTILS/partition_c.sh && SB' 

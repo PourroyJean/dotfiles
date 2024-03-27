@@ -1,7 +1,9 @@
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
-export ZSH_CUSTOM="${DT_ROOT_PATH}/zsh"
+export ZSH_CUSTOM="${DF_ROOT_PATH}/zsh"
 export ZSH="$HOME/.oh-my-zsh"             # Path to your oh-my-zsh installation. TODO portable ?
+DF_PATH_TO_UTILS="${DF_ROOT_PATH}/utils"
+
 
 
 ########### HISTORY SETINGS ############
@@ -50,12 +52,17 @@ export FZF_CTRL_R_OPTS="\
 --border sharp \
 --height 40% \
 --cycle \
---prompt='Recherche> ' \
+--prompt='ctrl+y to copy cmd > ' \
 --pointer='→' \
 --color='dark,fg:magenta' \
 --margin=3%,3%,8%,2% \
---layout default"
+--layout default \
+--bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort' \
+"
 
-# TODO voir ce que fait l'installeur de fzf pour pas avoir de doublon
+#FZF CTRL + T configuration : preview with bat
+export FZF_DEFAULT_OPTS="--ansi --preview-window 'right:70%' --preview 'bat --color=always --style=header,grid --line-range :100 {}'"
+
+# This should be done by fzf install directly in the ~.zshrc file
 eval "$(fzf --zsh)"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
