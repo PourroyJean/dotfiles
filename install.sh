@@ -21,7 +21,7 @@ declare -A is_installed=(
 )
 
 install_fzf() {
-    echo "Starting installation of fzf..."
+    echo "[FZF] Starting installation of fzf..."
     if ! command -v fzf &>/dev/null; then
         if git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf" >/dev/null 2>&1; then
             if "$HOME/.fzf/install" --key-bindings --completion --update-rc >/dev/null 2>&1; then
@@ -42,7 +42,7 @@ install_fzf() {
 # Add similar functions for TREE, EMACS, TMUX, GDU, HELLO, XTHI installations
 # Example for TREE
 install_tree() {
-    echo "Starting installation of tree..."
+    echo "[TREE] Starting installation of tree..."
     if command -v tree &>/dev/null; then
         echo "  ~ Tree is already installed."
         is_installed[TREE]=true
@@ -78,7 +78,7 @@ install_tree() {
 
 # Example for EMACS linking
 customize_emacs() {
-    echo "Starting customization of Emacs configuration..."
+    echo " [EMACS] Starting customization of Emacs configuration..."
     if ! command -v emacs &>/dev/null; then
         echo "  ~ Emacs is not installed."
         is_installed[EMACS]=false
@@ -110,7 +110,7 @@ customize_tmux() {
 
 
 customize_zshrc(){
-    echo "Starting customization of $ZSHRC_FILE ..."
+    echo "[ZSHRC] Starting customization of $ZSHRC_FILE ..."
 
     LINE1="export DF_ROOT_PATH=\"$DF_ROOT_PATH\""
     LINE2="source \"\$DF_ROOT_PATH/zsh/my_zshrc.sh\""
@@ -120,6 +120,8 @@ customize_zshrc(){
         echo    "$LINE1" >> "$ZSHRC_FILE"
         echo -e "$LINE2\n" >> "$ZSHRC_FILE"
         echo "  ~ Updated $ZSHRC_FILE with DF_ROOT_PATH : ${DF_ROOT_PATH}"
+    else
+        echo "  ~ export DF_ROOT_PATH already set in $ZSHRC_FILE."
     fi
 
     if ! grep -q "export MY_SLURM_ACCOUNT" "$ZSHRC_FILE"; then
@@ -139,7 +141,7 @@ customize_zshrc(){
 
 # Function to perform additional bashrc customizations
 customize_bashrc() {
-    echo "Starting customization of .bashrc..."
+    echo "[BASHRC] Starting customization of .bashrc..."
 
     # Custom PS1 prompt with git branch
     if ! grep -q --fixed-strings "export PS1='\[\033[00;32m" "$BASHRC_FILE"; then
@@ -171,7 +173,7 @@ customize_bashrc() {
 }
 
 install_gdu() {
-    echo "Starting installation of gdu..."
+    echo "[GDU] Starting installation of gdu..."
     if command -v gdu &>/dev/null; then
         echo "  ~ gdu is already installed."
         is_installed[GDU]=true
@@ -195,7 +197,7 @@ install_gdu() {
 }
 
 install_xthi() {
-    echo "Starting installation of xthi_mpi..."
+    echo "[XTHI] Starting installation of xthi_mpi..."
     if command -v xthi_mpi &>/dev/null; then
         echo "  ~ xthi_mpi is already installed."
         is_installed[XTHI]=true
@@ -229,7 +231,7 @@ install_xthi() {
 
 # Function to install hello_jobstep
 install_hello() {
-    echo "Starting installation of hello_jobstep..."
+    echo "[HELLO] Starting installation of hello_jobstep..."
     if command -v hello_jobstep &>/dev/null; then
         echo "  ~ hello_jobstep is already installed."
         is_installed[HELLO]=true
@@ -271,7 +273,7 @@ install_hello() {
 }
 
 install_bat() {
-    echo "Starting installation of bat..."
+    echo "[BAT] Starting installation of bat..."
     # Check if bat is already installed
     if ! command -v bat &>/dev/null; then
         BAT_URL="https://github.com/sharkdp/bat/releases/download/v0.24.0/bat-v0.24.0-x86_64-unknown-linux-gnu.tar.gz"
@@ -307,12 +309,12 @@ install_bat() {
 
 
 # Call installation and configuration functions
-#install_fzf
+# install_fzf
 # install_tree
-#install_xthi
+# install_xthi
 # install_hello
-#install_gdu
-#install_bat
+# install_gdu
+# install_bat
 
 #customize_emacs
 # customize_tmux
@@ -320,6 +322,8 @@ install_bat() {
 customize_zshrc
 
 # Summary
+echo ""
+echo ""
 echo "+ Summary of the installation: "
 for key in "${!is_installed[@]}"; do
     printf "   - %-10s %s\n" $key ${is_installed[$key]}

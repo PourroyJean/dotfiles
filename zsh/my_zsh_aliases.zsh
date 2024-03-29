@@ -21,6 +21,7 @@ alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 alias cp='cp -i'
+alias cat='bat'
 
 # alias which='(alias; declare -f) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot' # TODO
 
