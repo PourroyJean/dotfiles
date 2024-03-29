@@ -1,8 +1,8 @@
-# If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$PATH
-export ZSH_CUSTOM="${DF_ROOT_PATH}/zsh"
-export ZSH="$HOME/.oh-my-zsh"             # Path to your oh-my-zsh installation. TODO portable ?
-DF_PATH_TO_UTILS="${DF_ROOT_PATH}/utils"
+
+export ZSH_CUSTOM="${DF_ROOT_PATH}/zsh"     # Will automatically source all .zsh file in this folder : aliases for example...
+export ZSH="$HOME/.oh-my-zsh"               # Path to your oh-my-zsh installation. TODO portable ?
+DF_PATH_TO_UTILS="${DF_ROOT_PATH}/utils"    # utils contains slurm partition settings, gpu env module...
+export PATH=$HOME/bin:/usr/local/bin:$PATH  # If you come from bash you might have to change your $PATH.
 
 
 
@@ -25,32 +25,28 @@ unsetopt beep               # This option disables the terminal bell.
 bindkey -e                  # This sets up 'emacs' style line editing.
 
 
-# ALIASES
-test -s ${ZSH_CUSTOM}/my_zsh_aliases.sh     && . ${ZSH_CUSTOM}/my_zsh_aliases.sh     || true 
-test -s ${ZSH_CUSTOM}/my_zsh_aliases_hpc.sh && . ${ZSH_CUSTOM}/my_zsh_aliases_hpc.sh || true 
-
-
 # PROMPT PS1 STYLE :
 fpath+=${ZSH_CUSTOM}/plugins/pure
 autoload -U promptinit; promptinit
-prompt pure                            # DL dans plugins. Voir https://github.com/sindresorhus/pure
-prompt_newline=$(echo -n "\u200B")     # I prefer a one liner version
+prompt pure                                 # DL dans plugins. Voir https://github.com/sindresorhus/pure
+# prompt_newline=$(echo -n "\u200B")        # I prefer a one liner version, not sure after all
 
 # Path to your oh-my-zsh installation.
-zstyle ':omz:update' mode disabled                     # Disable automatic updates
-DISABLE_MAGIC_FUNCTIONS="true"                         # Pasting URLs and other text is messed up.
-ENABLE_CORRECTION="true"                               # Enable command auto-correction.
+zstyle ':omz:update' mode disabled          # Disable automatic updates
+DISABLE_MAGIC_FUNCTIONS="true"              # Pasting URLs and other text is messed up.
+ENABLE_CORRECTION="true"                    # Enable command auto-correction.
 
 
-# Should be at the end of the file
-plugins=(zsh-autosuggestions zsh-syntax-highlighting)
+# source this before fzfc
+plugins=(zsh-autosuggestions zsh-syntax-highlighting colored-man-pages)
 source $ZSH/oh-my-zsh.sh
 
 
-#FZF CTRL + R configuration :
+################################################     FZF     ############################################
+# FZF - CTRL + R configuration :
 export FZF_CTRL_R_OPTS="\
 --border sharp \
---height 40% \
+--height 60% \
 --cycle \
 --prompt='ctrl+y to copy cmd > ' \
 --pointer='→' \
@@ -60,9 +56,10 @@ export FZF_CTRL_R_OPTS="\
 --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort' \
 "
 
-#FZF CTRL + T configuration : preview with bat
-export FZF_DEFAULT_OPTS="--ansi --preview-window 'right:70%' --preview 'bat --color=always --style=header,grid --line-range :100 {}'"
+# FZF - CTRL+T option : preview with bat
+export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always {} | head -500'"
 
 # This should be done by fzf install directly in the ~.zshrc file
 eval "$(fzf --zsh)"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+

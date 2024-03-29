@@ -1,5 +1,6 @@
 #!/bin/zsh
 
+
 #2 slurm particion: CPU and GPU
 alias PARTC='source $DF_PATH_TO_UTILS/partition_c.sh && SB' 
 alias PARTG='source $DF_PATH_TO_UTILS/partition_g.sh && SB'
@@ -19,8 +20,8 @@ alias sc='scancel -u $USER'
 
 
 # SB                              # This will print the SLURM information
-# SB my_script.sh                 # This will run "sbatch my_script.sh         --wait and print the output file"
-# SB sbatch option my_script.sh   # This will run "sbatch my_script.sh options --wait and print the output file"
+# SB my_script.sh                 # This will run "sbatch my_script.sh         --wait    + print the output file"
+# SB sbatch option my_script.sh   # This will run "sbatch my_script.sh options --wait    + print the output file"
 SB() {
   if [ $# -eq 0 ]; then
     # No arguments provided, print the SLURM information

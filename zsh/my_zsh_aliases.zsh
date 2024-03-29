@@ -2,6 +2,7 @@
 ############# GENERAL ################
 ######################################
 
+
 alias lrt='ls -lrt'               # sort by date
 alias l.='ls -d .* --color=auto'  # ls only .file
 alias mv='mv -i'
@@ -78,8 +79,8 @@ alias WHO='whoami ; echo -e "\e[1m\e[38;2;1;169;130m\u2584\u2584\u2584\u2584\u25
 
 #GREP find in file : GREP . string
 GREP() {
-    grep --color=auto -nRHIi --no-messages $2 $1 # TODO bash version
-    command grep --color=auto -nRHIi --no-messages "$2" "$1" | column -t -s ":"
+    # grep --color=always -nRHIi --no-messages $2 $1 # TODO bash version
+    command grep --color=always -nRHIi --no-messages "$2" "$1" | column -t -s ":"
 }
 
 #FIND find filename : FIND . filename
@@ -97,46 +98,25 @@ MAN (){
   done
 }
 
-######################################
-########### BASH vs ZSH ##############
-######################################
-BASH_TYPE=`ps -p$$ -o cmd="",comm="",fname="" 2>/dev/null | sed 's/^-//' | grep -oE '\w+' | head -n1`
-# TODO
-# if [[ $BASH_TYPE == "bash" ]]
-# then
-#     hist (){
-#          if [ $# -eq 0 ]
-#          then
-#             echo "Max 1000 lines..."
-#             history 1000 | cut -c 8-
-#          else
-#             history | cut -c 8- | grep $1
-#          fi
-#     }
-# elif [[ $BASH_TYPE == "zsh" ]]
-# then
-#     hist (){
-#          if [ $# -eq 0 ]
-#          then
-#             echo "Max 1000 lines..."
-#             history -1000 | cut -c 8-
-#          else
-#             history 0 | cut -c 8- | grep $1
-#          fi
-#     }
+
+# Usage: hist [search_term]
+#  - Without arguments, shows the last 30 commands. 
+#  - With an argument, searches and displays the last 30 matches.
+#  - R emove the first 30 caracters :  778  2024-03-29 17:26:29   ssh -X abc
+hist (){
+      echo "Max 30 lines : $1"
+      if [ $# -eq 0 ]
+      then
+        history -30 | cut -c 30-
+      else
+        history | grep --color=always  $1 | tail -n 30
+      fi
+}
 # fi
 
-######################################
-########## MAC vs LINUX ##############
-######################################
-if [[ $OSTYPE == 'darwin'* ]]; then
-    alias ls="ls -Gh"
-else
-    alias ls='ls --color=auto -h' # color + size in MB GB...
-fi
 
 ######################################
 #############   SSH  ################
 ######################################
-alias ssgre="ssh pourroy@16.16.184.23"
+alias ssgre="ssh pourroy@16.16.184.124"
 alias sslumi="ssh pourroy@lumi.csc.fi"
