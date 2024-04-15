@@ -46,6 +46,9 @@ alias caca='ls -tp | grep -v /  | head -1     | xargs tail -v -n +1'
 # same but keep track of the file
 alias CACA='ls -tp | grep -v / | head -1 | xargs tail -f -v -n +1'
 
+# top but only for me
+alias TOP="top -u $(whoami)"
+
 # # ex - archive extractor
 # # usage: ex <file>
 ex ()
