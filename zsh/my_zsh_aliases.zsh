@@ -115,6 +115,14 @@ hist (){
 }
 # fi
 
+SCREEN () {
+	if screen -list | grep -q "MY_SCREEN"
+	then
+		screen -x MY_SCREEN
+	else
+		screen -S MY_SCREEN
+	fi
+}
 
 ######################################
 #############   SSH  ################
