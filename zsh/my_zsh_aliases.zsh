@@ -115,14 +115,38 @@ hist (){
 }
 # fi
 
-SCREEN () {
-	if screen -list | grep -q "MY_SCREEN"
-	then
-		screen -x MY_SCREEN
-	else
-		screen -S MY_SCREEN
-	fi
+
+# Function: S
+# Usage:
+#   S [session_name]  - Attach to or create a screen session with the given name.
+#                       If no session name is provided, defaults to "MY_SCREEN".
+#   S ls              - List all active screen sessions using "screen -ls".
+# Description:
+#   This function helps manage screen sessions. If a session name is provided,
+#   it will attach to an existing session with that name or create a new one if
+#   it doesn't exist. If "ls" is provided as an argument, it lists all active
+#   screen sessions.
+
+S() {
+    # If the first argument is "ls", run "screen -ls"
+    if [ "$1" == "ls" ]; then
+        screen -ls
+        return
+    fi
+
+    # If a parameter is provided, use it as the session name; otherwise, use "MY_SCREEN"
+    local session_name="${1:-MY_SCREEN}"
+
+    # Check if the session exists
+    if screen -list | grep -q "$session_name"; then
+        # Attach to the existing session
+        screen -x "$session_name"
+    else
+        # Create a new session with the given or default name
+        screen -S "$session_name"
+    fi
 }
+
 
 ######################################
 #############   SSH  ################
