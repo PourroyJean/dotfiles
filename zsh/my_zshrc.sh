@@ -1,8 +1,13 @@
 
-export ZSH_CUSTOM="${DF_ROOT_PATH}/zsh"     # Will automatically source all .zsh file in this folder : aliases for example...
-export ZSH="$HOME/.oh-my-zsh"               # Path to your oh-my-zsh installation. TODO portable ?
-DF_PATH_TO_UTILS="${DF_ROOT_PATH}/utils"    # utils contains slurm partition settings, gpu env module...
-export PATH=$HOME/bin:/usr/local/bin:$PATH  # If you come from bash you might have to change your $PATH.
+export ZSH_CUSTOM="${DF_ROOT_PATH}/zsh"     # Will automatically source all .zsh file in this folder : aliases for example... TODO c'est faux ?
+export ZSH=${DF_ROOT_PATH}/OhMyZsh          # Path to your Oh My Zsh installation installed with ZSH=$DF_ROOT_PATH/OhMyZsh sh install_ohmyzsh.sh
+
+export PATH=$HOME/bin:/usr/local/bin:$PATH          # If you come from bash you might have to change your $PATH.
+export DF_PATH_TO_UTILS="${DF_ROOT_PATH}/utils"     # utils contains slurm partition settings, gpu env module...
+
+########### ALIASES SOURCING ####################
+source ${ZSH_CUSTOM}/my_zsh_aliases.zsh
+source ${ZSH_CUSTOM}/my_zsh_aliases_hpc.zsh
 
 
 
@@ -25,10 +30,32 @@ unsetopt beep               # This option disables the terminal bell.
 bindkey -e                  # This sets up 'emacs' style line editing.
 
 
+# fpath+=$DF_ROOT_PATH/zsh/plugins/pure
+# fpath+=$DF_ROOT_PATH/zsh/plugins/zsh-completions/src
+
+# autoload -U promptinit; promptinit
+# prompt pure
+
+
+
 # PROMPT PS1 STYLE :
-fpath+=${ZSH_CUSTOM}/plugins/pure
-autoload -U promptinit; promptinit
-prompt pure                                 # DL dans plugins. Voir https://github.com/sindresorhus/pure
+# fpath+=${ZSH_CUSTOM}/plugins/pure
+# fpath+=(/home/x_pourroj/dotfiles/zsh/plugins/pure)
+# fpath+=(/home/x_pourroj/TEST_ZSH_PURE_ONLY/pure)
+# autoload -U promptinit; promptinit
+# prompt pure
+
+# echo $fpath
+# autoload -U promptinit
+# promptinit
+# :
+# autoload -U promptinit; promptinit
+
+# autoload -U promptinit; promptinit
+# autoload -Uz promptinit
+# promptinit
+
+# prompt pure                                 # DL dans plugins. Voir https://github.com/sindresorhus/pure
 # prompt_newline=$(echo -n "\u200B")        # I prefer a one liner version, not sure after all
 
 # Path to your oh-my-zsh installation.
@@ -38,7 +65,8 @@ ENABLE_CORRECTION="true"                    # Enable command auto-correction.
 
 
 # source this before fzfc
-plugins=(zsh-autosuggestions zsh-syntax-highlighting colored-man-pages)
+# plugins=(zsh-autosuggestions zsh-syntax-highlighting colored-man-pages)
+plugins=()
 source $ZSH/oh-my-zsh.sh
 
 
@@ -60,6 +88,9 @@ export FZF_CTRL_R_OPTS="\
 export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always {} | head -500'"
 
 # This should be done by fzf install directly in the ~.zshrc file
-eval "$(fzf --zsh)"
+# eval "$(fzf)"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# export PS1='%1~%# '
+
 
