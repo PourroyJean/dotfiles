@@ -2,7 +2,7 @@
 ############# GENERAL ################
 ######################################
 
-
+alias ls='ls --color=auto'
 alias lrt='ls -lrt'               # sort by date
 alias l.='ls -d .* --color=auto'  # ls only .file
 alias mv='mv -i'
@@ -46,6 +46,9 @@ cd() {
 alias caca='ls -tp | grep -v /  | head -1     | xargs tail -v -n +1'
 # same but keep track of the file
 alias CACA='ls -tp | grep -v / | head -1 | xargs tail -f -v -n +1'
+
+# top but only for me
+alias TOP="top -u $(whoami)"
 
 # # ex - archive extractor
 # # usage: ex <file>
@@ -114,6 +117,41 @@ hist (){
       fi
 }
 # fi
+
+# CHMOD Function
+# Changes the permissions of specified files to 'a+x'.
+# Usage:
+#   CHMOD pattern1 [pattern2 ...]
+# Example:
+#   CHMOD my_files_* another_pattern_*
+CHMOD() {
+    if [ "$#" -eq 0 ]; then
+        echo "No files specified. Please provide a file pattern."
+        return
+    fi
+
+    for file_pattern in "$@"; do
+        files=$(ls -tp $file_pattern 2>/dev/null)
+        
+        if [ -z "$files" ]; then
+            echo "No files found matching pattern: $file_pattern"
+            continue
+        fi
+
+        for file in $files; do
+            if [ ! -d "$file" ]; then
+                echo "Change $file permissions to a+x? (Y/N): "
+                read response
+                if [[ "$response" =~ ^[Yy]$ ]]; then
+                    chmod a+x "$file"
+                    echo "Permissions changed for $file"
+                else
+                    echo "Permission change aborted for $file."
+                fi
+            fi
+        done
+    done
+}
 
 
 # Function: S
