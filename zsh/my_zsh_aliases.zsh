@@ -102,6 +102,19 @@ MAN (){
   done
 }
 
+LS ()
+{
+    if [[ -d "$1" ]]; then
+        du -sh "$1";
+    else
+        if [[ "$1" =~ ^[0-9]+$ ]]; then
+            ls --color=auto -h -lS | head -n "$1";
+        else
+            ls --color=auto -h -lS | head -n 11;
+        fi;
+    fi
+}
+
 
 # Usage: hist [search_term]
 #  - Without arguments, shows the last 30 commands. 
