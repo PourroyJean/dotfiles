@@ -51,28 +51,107 @@ alias CACA='ls -tp | grep -v / | head -1 | xargs tail -f -v -n +1'
 alias TOP="top -u $(whoami)"
 
 # # ex - archive extractor
-# # usage: ex <file>
-ex ()
-{
-  if [ -f $1 ] ; then
-    case $1 in
-      *.tar.bz2)   tar xjf $1   ;;
-      *.tar.gz)    tar xzf $1   ;;
-      *.bz2)       bunzip2 $1   ;;
-      *.rar)       unrar x $1     ;;
-      *.gz)        gunzip $1    ;;
-      *.tar)       tar xf $1    ;;
-      *.tbz2)      tar xjf $1   ;;
-      *.tgz)       tar xzf $1   ;;
-      *.zip)       unzip $1     ;;
-      *.Z)         uncompress $1;;
-      *.7z)        7z x $1      ;;
-      *)           echo "'$1' cannot be extracted via ex()" ;;
-    esac
-  else
-    echo "'$1' is not a valid file"
-  fi
+# # usage: ex <file1> <file2> ...
+ex() {
+    if [ $# -eq 0 ]; then
+        echo "Usage: ex <file> [<file2> ...]"
+        return 1
+    fi
+
+    for file in "$@"; do
+        if [ -f "$file" ]; then
+            actual_type=$(file -b "$file")
+            expected_type=""
+            required_command=""
+            extract_command=""
+
+            case "$file" in
+                (*.tar.bz2|*.tbz2)
+                    expected_type="bzip2 compressed"
+                    required_command="tar"
+                    extract_command="tar xjf \"$file\""
+                    ;;
+                (*.tar.gz|*.tgz)
+                    expected_type="gzip compressed"
+                    required_command="tar"
+                    extract_command="tar xzf \"$file\""
+                    ;;
+                (*.bz2)
+                    expected_type="bzip2 compressed"
+                    required_command="bunzip2"
+                    extract_command="bunzip2 \"$file\""
+                    ;;
+                (*.rar)
+                    expected_type="RAR archive"
+                    required_command="unrar"
+                    extract_command="unrar x \"$file\""
+                    ;;
+                (*.gz)
+                    expected_type="gzip compressed"
+                    required_command="gunzip"
+                    extract_command="gunzip \"$file\""
+                    ;;
+                (*.tar)
+                    expected_type="tar archive"
+                    required_command="tar"
+                    extract_command="tar xf \"$file\""
+                    ;;
+                (*.zip)
+                    expected_type="Zip archive"
+                    required_command="unzip"
+                    extract_command="unzip \"$file\""
+                    ;;
+                (*.Z)
+                    expected_type="compressed data"
+                    required_command="uncompress"
+                    extract_command="uncompress \"$file\""
+                    ;;
+                (*.7z)
+                    expected_type="7-zip archive"
+                    required_command="7z"
+                    extract_command="7z x \"$file\""
+                    ;;
+                (*.xz|*.tar.xz)
+                    expected_type="XZ compressed"
+                    required_command="tar"
+                    extract_command="tar xJf \"$file\""
+                    ;;
+                (*)
+                    echo "'$file' cannot be extracted via ex()"
+                    continue
+                    ;;
+            esac
+
+            # Check if the required command is available
+            if ! command -v "$required_command" > /dev/null; then
+                echo "Error: '$required_command' is not installed."
+                continue
+            fi
+
+            # Check if actual file type matches the expected type
+            if [[ "$actual_type" != *"$expected_type"* ]]; then
+                echo "Warning: '$file' may not be a valid file (detected type: $actual_type)."
+                printf "Do you want to continue extraction? [y/N] "
+                read choice
+                case "$choice" in
+                    y|Y|yes|Yes)
+                        ;;
+                    *)
+                        echo "Skipping extraction of '$file'."
+                        continue
+                        ;;
+                esac
+            fi
+
+            # Execute the extraction command
+            eval "$extract_command"
+
+        else
+            echo "'$file' is not a valid file"
+        fi
+    done
 }
+
 
 
 
