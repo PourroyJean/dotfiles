@@ -259,7 +259,7 @@ CHMOD() {
 
 S() {
     # If the first argument is "ls", run "screen -ls"
-    if [ "$1" == "ls" ]; then
+    if [ "$1" = "ls" ]; then
         screen -ls
         return
     fi
