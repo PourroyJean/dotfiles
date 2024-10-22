@@ -26,8 +26,21 @@ alias cat='bat'
 # alias which='(alias; declare -f) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot' # TODO
 
 # pwd that can take argument : pwd | pwd File1 File2
-mypwd() { [ $# -eq 0 ] && pwd || (for arg in "$@"; do [ -e "$arg" ] && echo "$(realpath "$arg")" || echo "Pwd error Invalid arg: $arg"; done); }
-alias pwd='mypwd "$@"'
+mypwd() {
+  if [ $# -eq 0 ]; then
+    command pwd
+  else
+    for arg in "$@"; do
+      if [ -e "$arg" ]; then
+        echo "$(realpath "$arg")"
+      else
+        echo "Pwd error: Invalid arg: $arg"
+      fi
+    done
+  fi
+}
+alias pwd='mypwd'
+
 
 
 
