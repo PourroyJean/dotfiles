@@ -1,9 +1,9 @@
-#infinite bash
-export HISTSIZE="1000000000"        # Lines of history that we can store in memory.
-export HISTFILESIZE="1000000000"    # Lines of history we can write on disk.
-export PROMPT_COMMAND="history -a"  # Append command each time to history file
-export HISTCONTROL=ignoreboth       # Don’t save duplicates
-export HISTTIMEFORMAT="%F %T "      # example : 9  2023-04-13 11:23:46 echo "a"
+export HISTSIZE="1000000000"        # Max number of commands stored in memory for the session
+export HISTFILESIZE="1000000000"    # Max number of commands saved in the history file on disk
+export PROMPT_COMMAND="history -a"  # Immediately append each command to the history file
+export HISTCONTROL=ignoreboth       # Ignore duplicates and commands starting with a space
+export HISTTIMEFORMAT="%F %T "      # Show timestamp before each command (e.g., 2023-04-13 11:23:46)
+
 
 #FZF CTRL-R layout
 export FZF_CTRL_R_OPTS="\
