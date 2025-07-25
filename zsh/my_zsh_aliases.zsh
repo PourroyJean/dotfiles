@@ -21,7 +21,23 @@ alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 alias cp='cp -i'
-alias cat='bat'
+alias cat='bat -pp'
+
+FIND_LIB() {
+    local toolname="$1"
+    if [ -z "$toolname" ]; then
+        echo "Usage: find_tool_files <toolname>"
+        echo "Example: find_tool_files cxi"
+        return 1
+    fi
+    
+    echo "--- Searching for ${toolname} files ---"
+    echo "Libraries:"
+    find /usr/local /opt /usr -type f -name "lib${toolname}*.so*" 2>/dev/null || echo "No lib${toolname}*.so* found"
+    echo "Headers:"
+    find /usr/local /opt /usr -type f -name "*${toolname}*.h" 2>/dev/null || echo "No *${toolname}*.h found"
+    echo ""
+}
 
 # alias which='(alias; declare -f) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot' # TODO
 
