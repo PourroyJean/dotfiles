@@ -185,7 +185,16 @@ ex() {
 
 
 # HPE way
-alias WHO='whoami ; echo -e "\e[1m\e[38;2;1;169;130m\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\e[0m\n\e[1m\e[38;2;1;169;130m\u2588\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u2588\u0020\e[0m\n\e[1m\e[38;2;1;169;130m\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\e[0m\n\e[1mHewlett Packard\e[0m\nEnterprise\n"'
+# OLD LOGO alias WHO='whoami ; echo -e "\e[1m\e[38;2;1;169;130m\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\e[0m\n\e[1m\e[38;2;1;169;130m\u2588\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u2588\u0020\e[0m\n\e[1m\e[38;2;1;169;130m\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\e[0m\n\e[1mHewlett Packard\e[0m\nEnterprise\n"'
+alias WHO='whoami; echo -e "
+\e[0m\e[1m▗▖ ▗▖▗▄▄▖ ▗▄▄▄▖
+\e[0m\e[1m▐▌ ▐▌▐▌ ▐▌▝▘
+\e[0m\e[1m▐▛▀▜▌▐▛▀▘ \e[38;2;1;169;130m▐▛▀▀▘\e[0m
+\e[0m\e[1m▐▌ ▐▌▐▌   \e[38;2;1;169;130m▐▙▄▄▖\e[0m
+
+\e[1mHewlett Packard\e[0m
+Enterprise"'
+
 
 # User specific aliases and functions
 
