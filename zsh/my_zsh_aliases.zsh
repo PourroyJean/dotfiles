@@ -199,9 +199,15 @@ Enterprise"'
 # User specific aliases and functions
 
 #GREP find in file : GREP . string
-GREP() {
-    # grep --color=always -nRHIi --no-messages $2 $1 # TODO bash version
-    command grep --color=always -nRHIi --no-messages "$2" "$1" | column -t -s ":"
+GREP () {
+        if [[ $# -lt 2 ]]; then
+            echo "usage: GREP <dir> <pattern> [params]"
+            return 1
+        fi
+        local target_dir="$1"
+        shift
+
+        command grep --color=always -nRHIi --no-messages "${@}" "$target_dir" | column -t -s ":"
 }
 
 #FIND find filename : FIND . filename
