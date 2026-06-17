@@ -1,0 +1,30 @@
+# tests/Dockerfile.test
+#
+# Clean-room install + verify on Rocky Linux 8 (closest distro to RHEL-based HPC).
+# Build: docker build -f tests/Dockerfile.test -t df-test .
+# The build runs install.sh + verify_install.sh; build fails if verify fails.
+# Some checks are expected to fail until issues #2-#8 land — see tests/README.md.
+
+FROM rockylinux:8
+
+# Build dependencies + zsh (no weak deps to keep image lean)
+RUN dnf install -y --setopt=install_weak_deps=False \
+        git curl wget make gcc gcc-c++ which findutils diffutils \
+        zsh ca-certificates procps-ng \
+    && dnf clean all
+
+# Non-root user (some installers misbehave as root)
+RUN useradd -m -s /bin/bash testuser
+USER testuser
+WORKDIR /home/testuser
+
+# Copy the repo
+COPY --chown=testuser:testuser . /home/testuser/dotfiles
+
+# Run installer — may fail until #2-#8 land. We tolerate non-zero so verify
+# can still run and report its staged checks.
+RUN bash /home/testuser/dotfiles/install.sh \
+    || echo "[CI] install.sh returned non-zero (expected until blockers land)"
+
+# Run the staged verification. Non-zero exit fails the build.
+RUN bash /home/testuser/dotfiles/tests/verify_install.sh

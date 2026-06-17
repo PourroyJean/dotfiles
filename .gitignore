@@ -1,1 +1,12 @@
 tmp/*
+
+# oh-my-zsh is installed by install.sh into $DF_ROOT_PATH/OhMyZsh
+# (i.e. inside this repo). Never commit it.
+OhMyZsh/
+
+# Backup files created by customize_* functions
+*.bak-*
+*.old
+
+# Roadmap / planning docs (committed manually if desired)
+amelioration.md

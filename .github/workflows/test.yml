@@ -1,0 +1,22 @@
+name: test
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  install-rocky8:
+    name: install + verify on Rocky Linux 8
+    runs-on: ubuntu-latest
+    # Initial setup: blocker issues #2-#8 are not yet implemented, so some
+    # verify stages will fail. Remove `continue-on-error` once all blockers
+    # have landed and CI is consistently green.
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build + verify (Docker)
+        run: docker build -f tests/Dockerfile.test -t df-test .
